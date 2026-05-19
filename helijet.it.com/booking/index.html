@@ -535,20 +535,55 @@ var TIER_PRICE_OFFSET = {
   'FULL FARE':    1500
 };
 
-// ── Route pool: [dep city, arr city] ──
-var ROUTES = [
-  ['Vancouver Harbour',        'Port of Quebec (Quebec)'],
-  ['Vancouver Int\'l (YVR-S)', 'Port of Montreal (Quebec)'],
-  ['Coal Harbour Heliport',    'Port of Vancouver (British Columbia)'],
-  ['Richmond Heliport',        'Port of Montreal (Quebec)'],
-  ['Victoria Harbour',         'Port of Quebec (Quebec)'],
-  ['Nanaimo Harbour',          'Port of Montreal (Quebec)'],
-  ['Vancouver Harbour',        'Port of Vancouver (British Columbia)'],
-  ['Coal Harbour Heliport',    'Port of Montreal (Quebec)'],
+// ── Route pool & randomize logic ──
+var DEPARTURES = [
+  "Port of St. John's",
+  "Port aux Basques",
+  "Corner Brook",
+  "Conception Bay South",
+  "Lewisporte",
+  "Clarenville",
+  "Holyrood",
+  "St. Anthony",
+  "Twillingate",
+  "Battle Harbour",
+  "Argentia",
+  "Bay Roberts",
+  "Fortune",
+  "Grand Bank",
+  "Harbour Grace",
+  "Bonavista",
+  "Placentia",
+  "Marystown",
+  "Burgeo",
+  "Trinity"
 ];
-function pickRoute(rng){ return ROUTES[Math.floor(rng() * ROUTES.length)]; }
 
-function getRouteForDate(rng, dateKey) {
+var ARRIVALS = [
+  "Port of Quebec (Quebec)",
+  "Port of Montreal (Quebec)",
+  "Port of Vancouver (British Columbia)",
+  "Port of Halifax (Nova Scotia)",
+  "Sydney Harbour (Nova Scotia)",
+  "Port of Prince Rupert (British Columbia)",
+  "Port of Saint John (New Brunswick)",
+  "Lévis Ferry Terminal (Quebec)",
+  "Sept-Îles (Quebec)",
+  "Baie-Comeau (Quebec)",
+  "Port aux Basques (Newfoundland)",
+  "Port of Victoria (British Columbia)"
+];
+
+function pickRoute(rng) {
+  var dep = DEPARTURES[Math.floor(rng() * DEPARTURES.length)];
+  var arr = ARRIVALS[Math.floor(rng() * ARRIVALS.length)];
+  while (arr === dep || arr.replace(/\s*\(.*\)/, '') === dep.replace(/\s*\(.*\)/, '')) {
+    arr = ARRIVALS[Math.floor(rng() * ARRIVALS.length)];
+  }
+  return [dep, arr];
+}
+
+function getRouteForDate(rng, dateKey, si) {
   var fromParam = window.bookingParams ? window.bookingParams.from : null;
   var toParam = window.bookingParams ? window.bookingParams.to : null;
   var dateObj = null;
@@ -564,8 +599,13 @@ function getRouteForDate(rng, dateKey) {
       fromParam = "Port aux Basques";
     }
   }
+  
   var randomRoute = pickRoute(rng);
-  return [fromParam || randomRoute[0], toParam || randomRoute[1]];
+  if (si === 0) {
+    return [fromParam || randomRoute[0], toParam || randomRoute[1]];
+  } else {
+    return randomRoute;
+  }
 }
 
 function buildRandomSchedule(dateKey, dateLabel) {
@@ -601,7 +641,7 @@ function buildRandomSchedule(dateKey, dateLabel) {
       return { name: name, avail: av, price: (av===AV.sold||av===AV.waitlist) ? '' : price };
     });
 
-    var route = getRouteForDate(rng, dateKey);
+    var route = getRouteForDate(rng, dateKey, si);
     flights.push({
       num:  slot[0],
       date: dateLabel,
@@ -655,8 +695,8 @@ function buildLimitedSchedule(dateKey, dateLabel){
     var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
   }
   pool = pool.slice(0, count).sort(function(a,b){ return a[0]-b[0]; });
-  return pool.map(function(slot){
-    var route = getRouteForDate(rng, dateKey);
+  return pool.map(function(slot, si){
+    var route = getRouteForDate(rng, dateKey, si);
     return {
       num:  slot[0],
       date: dateLabel,
@@ -674,8 +714,8 @@ function buildLimitedSchedule(dateKey, dateLabel){
 function buildWaitlistSchedule(dateKey, dateLabel){
   var rng  = makePRNG(strSeed(dateKey));
   var pool = ALL_SLOTS.slice(1, 5); // slots 703–715 area
-  return pool.map(function(slot){
-    var route = getRouteForDate(rng, dateKey);
+  return pool.map(function(slot, si){
+    var route = getRouteForDate(rng, dateKey, si);
     return {
       num:  slot[0],
       date: dateLabel,
