@@ -185,7 +185,14 @@ input.req:focus,select.req:focus{border-color:#e74c3c;box-shadow:0 0 0 2px rgba(
 .date-tab:not(.active) small{color:#e67e22}
 @media(max-width:640px){
   .payment-wrap,.conf-grid,.form-grid,.form-grid2,.form-full{grid-template-columns:1fr}
-  .ft-head,.ft-tier-row{grid-template-columns:44px 56px 1fr 1fr 1fr 80px;font-size:11px;padding:6px 8px}
+  
+  /* Hide the Date column on mobile (it's already on the active tab) */
+  .ft-head span:nth-child(2),
+  .ft-tier-row .ft-date-cell { display: none; }
+  
+  /* Use a 5-column grid instead of 6, giving the text more room to breathe */
+  .ft-head,.ft-tier-row{grid-template-columns:44px 1fr 1fr 1.1fr 75px;font-size:11px;padding:6px 8px;gap:4px;}
+  
   .date-tabs{flex-wrap:nowrap;overflow-x:auto}
 }
 </style>
