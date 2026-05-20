@@ -183,17 +183,204 @@ input.req:focus,select.req:focus{border-color:#e74c3c;box-shadow:0 0 0 2px rgba(
 .ft-no-flights{padding:16px 14px;font-size:13px;color:#666;font-style:italic;background:#f5f5f0;border-top:1px solid #ddd}
 .date-tab small{display:block;font-size:10px;color:#aab8e0;margin-top:1px}
 .date-tab:not(.active) small{color:#e67e22}
-@media(max-width:640px){
-  .payment-wrap,.conf-grid,.form-grid,.form-grid2,.form-full{grid-template-columns:1fr}
+/* Custom wrappers for flight cards */
+.ft-flight-card {
+  display: block;
+  border-bottom: 1px solid #dde3ef;
+}
+.ft-flight-card:last-child {
+  border-bottom: none;
+}
+.ft-flight-card-header {
+  display: none;
+}
+
+.ft-flight-card.odd-group .ft-tier-row {
+  background: #fafbfd;
+}
+.ft-flight-card.odd-group .ft-tier-row:hover {
+  background: #eef2ff;
+}
+.ft-flight-card:not(.odd-group) .ft-tier-row:hover {
+  background: #f0f4ff;
+}
+
+@media(max-width:767px){
+  /* Hide the desktop grid header */
+  .ft-head { display: none !important; }
   
-  /* Hide the Date column on mobile (it's already on the active tab) */
-  .ft-head span:nth-child(2),
-  .ft-tier-row .ft-date-cell { display: none; }
+  /* Convert flight wrapper to a premium card container */
+  .ft-flight-card {
+    background: #fff;
+    border: 1px solid #dde2ea;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    display: block !important;
+  }
   
-  /* Use a 5-column grid instead of 6, giving the text more room to breathe */
-  .ft-head,.ft-tier-row{grid-template-columns:44px 1fr 1fr 1.1fr 75px;font-size:11px;padding:6px 8px;gap:4px;}
+  /* Show header inside card */
+  .ft-flight-card-header {
+    display: flex !important;
+    flex-direction: column;
+    background: #e8ecf2;
+    padding: 12px 14px;
+    border-bottom: 1px solid #c8cfe0;
+    gap: 6px;
+  }
   
-  .date-tabs{flex-wrap:nowrap;overflow-x:auto}
+  .ft-card-flight-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .ft-card-flight-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #777;
+    letter-spacing: 0.5px;
+  }
+  
+  .ft-card-flight-val {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e3a7a;
+  }
+  
+  .ft-card-date {
+    font-size: 12px;
+    color: #555;
+    font-weight: 600;
+  }
+  
+  .ft-card-route {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #111;
+  }
+  
+  .ft-card-arrow {
+    color: #2152b2;
+    font-weight: 700;
+  }
+  
+  .ft-card-port strong {
+    color: #1e3a7a;
+  }
+  
+  /* Hide table cells that are moved to card header */
+  .ft-tier-row .ft-flight-num,
+  .ft-tier-row .ft-date-cell,
+  .ft-tier-row .ft-dep,
+  .ft-tier-row .ft-arr {
+    display: none !important;
+  }
+  
+  /* Render tier list as flex cards */
+  .ft-tier-row {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px !important;
+    border-bottom: 1px solid #dde3ef;
+    font-size: 12px;
+    gap: 12px;
+    background: transparent !important;
+  }
+  
+  .ft-tier-row:last-child {
+    border-bottom: none;
+  }
+  
+  .ft-tier-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .ft-tier-cell label {
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0 !important;
+  }
+  
+  .tier-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #222;
+  }
+  
+  .avail {
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
+  }
+  
+  .ft-price {
+    font-size: 14px;
+    font-weight: 700;
+    color: #2152b2;
+    white-space: nowrap;
+    text-align: right;
+  }
+  
+  /* Grid/Layout stack for forms */
+  .payment-wrap {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  
+  .conf-grid, .form-grid, .form-grid2, .form-full {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  
+  .card-form input, .card-form select {
+    max-width: 100% !important;
+  }
+  
+  .step-body {
+    padding: 16px 14px !important;
+  }
+  
+  #booking-header {
+    padding: 0 16px !important;
+  }
+  
+  #booking-header .logo {
+    font-size: 18px !important;
+  }
+  
+  /* Responsive Modals */
+  #np-modal, #res-modal {
+    width: calc(100% - 24px) !important;
+    max-width: 440px !important;
+    margin: 12px auto !important;
+    padding: 24px 20px !important;
+  }
+  
+  #np-modal iframe {
+    width: 100% !important;
+    max-width: 410px !important;
+    height: 600px !important;
+  }
+  
+  .date-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
 }
 .card-btn-spinner {
   width: 14px;
@@ -742,6 +929,23 @@ function renderFlights(dateKey) {
   var html = '';
   matchingFlights.forEach(function(f, fi) {
     var groupClass = (fi % 2 === 0) ? '' : ' odd-group';
+    html += '<div class="ft-flight-card' + groupClass + '">';
+    
+    // Card header visible only on mobile/tablet
+    html += '  <div class="ft-flight-card-header">';
+    html += '    <div class="ft-card-flight-info">';
+    html += '      <span class="ft-card-flight-label">FLIGHT</span>';
+    html += '      <span class="ft-card-flight-val">#' + f.num + '</span>';
+    html += '      <span class="ft-card-date">' + f.date + '</span>';
+    html += '    </div>';
+    html += '    <div class="ft-card-route">';
+    html += '      <span class="ft-card-port"><strong>' + f.dep.split(' ')[0] + '</strong>' + f.dep.slice(f.dep.indexOf(' ')) + '</span>';
+    html += '      <span class="ft-card-arrow">&rarr;</span>';
+    html += '      <span class="ft-card-port"><strong>' + f.arr.split(' ')[0] + '</strong>' + f.arr.slice(f.arr.indexOf(' ')) + '</span>';
+    html += '    </div>';
+    html += '  </div>';
+
+    html += '  <div class="ft-flight-card-tiers">';
     var firstRow = true;
     f.tiers.forEach(function(t, ti) {
       var isSold     = t.avail === AV.sold;
@@ -752,7 +956,7 @@ function renderFlights(dateKey) {
                      : '<span class="avail ok">Available</span>';
       var priceHtml  = (isSold || isWaitlist) ? '' : '<span class="ft-price">' + t.price + '</span>';
       var radioId    = 'tier-' + f.num + '-' + ti;
-      html += '<div class="ft-tier-row' + groupClass + '">';
+      html += '<div class="ft-tier-row">';
       html += '<span class="ft-flight-num">' + (firstRow ? f.num : '') + '</span>';
       html += '<span class="ft-date-cell">'  + (firstRow ? f.date : '') + '</span>';
       html += '<span class="ft-dep">'        + (firstRow ? '<strong>' + f.dep.split(' ')[0] + '</strong>' + f.dep.slice(f.dep.indexOf(' ')) : '') + '</span>';
@@ -762,7 +966,8 @@ function renderFlights(dateKey) {
       html += '</div>';
       firstRow = false;
     });
-    html += '<div style="border-top:1px solid #dde3ef"></div>';
+    html += '  </div>'; // /.ft-flight-card-tiers
+    html += '</div>'; // /.ft-flight-card
   });
   body.innerHTML = html;
 }

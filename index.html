@@ -588,112 +588,87 @@ input[type="checkbox"]:checked {
     width: 100%;
 }
 
-
-@media (max-width: 499px) {
-   
+@media (max-width: 999px) {
     .vc_col-sm-3 {
         display: flex;
     }
-    
     .vc_col-sm-9 {
-       width: 100% !important;
-   }
-   
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
     .col4info {
         padding-top: 10px !important;
         display: block !important;
-       
     }
-    
-    .notice-board-blue-background{
-        display: none !important;
-    }
-    
-    .notice-board-header-blue-background {
-        display: none !important;
-    }
-    
+    .notice-board-blue-background,
+    .notice-board-header-blue-background,
     .notice-board-main-div-blue-background {
         display: none !important;
     }
-    
     .service-list-footer {
         display: flex !important;
         flex-direction: column !important; 
+        text-align: center !important;
     }
-    
-    .book-now-button-schedule{
+    .book-now-button-schedule {
         margin-top: -4px;
         margin-bottom: -6px !important;
     }
-    
-    .booking-container-class{
-         width: calc(100% + 60px) !important;
+    .booking-container-class {
+        width: 100% !important;
+        max-width: 100% !important;
     }
-    
-    #bookingcontainer {
+    #bookingcontainer, .bookingcontainer {
         display: flex !important;
-        margin-left: -32px !important;
-        margin-right: -32px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
         padding-top: 0px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
-    
     #currentStatus-Underline {
-        width : calc(100% - 3px) !important;
+        width: calc(100% - 3px) !important;
         margin-left: 3px !important;
     }
-    
-    
-   li {
-       margin-bottom: -18px !important;
-   }
-   
-   #passenger-list li,
-   #passenger-list li:last-child {
-       margin-bottom: 12px !important;
-       margin-top: 0px !important;
-   }
-
-   
-   body:not([data-hhun="1"]) #header-outer[data-using-secondary="1"]:not(.hidden-secondary) {
-       transform: none !important;
-       width: 100% !important;
+    li {
+        margin-bottom: -18px !important;
     }
-   
-   .header-outer{
-       width: 100% !important;
-   }
-   
-    .bookingcontainer{
-        margin-left: -32px !important;
-        margin-right: -32px !important;
+    #passenger-list li,
+    #passenger-list li:last-child {
+        margin-bottom: 12px !important;
+        margin-top: 0px !important;
     }
-    
+    body:not([data-hhun="1"]) #header-outer[data-using-secondary="1"]:not(.hidden-secondary),
+    .header-outer {
+        width: 100% !important;
+    }
     .page-template-default {
         align-items: center;
     }
     
-    .container1 {
-        flex-direction: column;
-        align-items: flex-start;
-        width: calc(100% - 60px);
-        gap: 4px !important;
+    /* Layout Containers */
+    .container0 {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        margin: 0 0 10px 0 !important;
+        padding: 0 4px !important;
+        box-sizing: border-box !important;
+    }
+    .container1, .container2, .container3 {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 12px !important;
+        box-sizing: border-box !important;
     }
     
-    .container2 {
-        flex-direction: column;
-        align-items: flex-start;
-        width: calc(100% - 60px);
-        gap: 60px !important;
-    }
-
-    .container0 {
-        display: flex;
-        align-items: flex-start;
-        width: calc(100% - 60px);
-        margin-left: 6px;
-    }
-
     .flightsLogo {
         font-size: 15px !important;
         font-family: Open Sans;
@@ -701,89 +676,74 @@ input[type="checkbox"]:checked {
         text-transform: uppercase;
         word-wrap: break-word;
     }
-
-    .right-container0{
+    .right-container0 {
         margin-right: 1px;
     }
-
     .MyAccount {
         font-weight: 700;
     }
-
     .currentStatus {
         margin-left: -8px !important;
         margin-right: 0px;
         font-size: 15px !important;
     }
-
+    
+    /* Swap button styling: Premium circular centered arrow button */
     .square {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: calc(100% - 60px) !important;
-        margin-bottom: -15px !important;
-        margin-top: -12px !important; 
-        justify-content: flex-end !important;
-        margin-left: 54px;
-    }
-
-    .square img {
-        position: absolute;
-    }
-
-    .container3 {
-        margin-top: 0px !important;
-        padding-left: 26px;
-        padding-top: 0px;
-        width: calc(100% - 60px) !important;
-        display: flex; 
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .container3.searchButtonFlight-activation {
-        margin-top: 0px !important;
-        padding-top: 10px !important;
-    }
-    
-    .right3.right3Status-activation {
-        margin-top: 15px !important;
-    }
-
-    .leftFrom, .left2, .rightTo, .right3 {
-        padding-top: 3px;
-        display: flex;
+        display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        flex: 1 1 auto;
-        margin-right: 55px !important;
-        margin-left: 5px;
-        width: 100%;
+        width: 100% !important;
+        height: 32px !important;
+        margin: -4px 0 !important;
+        z-index: 30 !important;
+        position: relative !important;
+    }
+    .square a {
+        background: #3056B2 !important;
+        color: #fff !important;
+        border-radius: 50% !important;
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
+    }
+    .square img {
+        position: static !important;
+        filter: brightness(0) invert(1) !important; /* Make swap icon white */
+        margin: 0 !important;
+    }
+    
+    /* Input columns stacking */
+    .leftFrom, .rightTo, .left2, .right2, .right3 {
+        padding-top: 3px;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        margin: 0 0 10px 0 !important;
+        box-sizing: border-box !important;
+        height: auto !important;
     }
     
     .right2 {
         padding-top: 0px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        margin-right: 0px !important;
-        margin-left: 0px !important;
-        width: 100% !important;
         margin-top: 0px !important;
-        height: auto !important;
     }
-
+    
     .passengerSection {
         width: 100% !important;
         box-sizing: border-box !important;
         pointer-events: auto !important;
+        padding: 12px !important;
     }
-
-
+    
     .right3 {
-        width: calc(100% + 1px);
-        margin-top: 17px
+        margin-top: 12px !important;
     }
     
     .Passenger-Age {
@@ -795,232 +755,41 @@ input[type="checkbox"]:checked {
         padding-top: 4px !important;
         margin-left: -4px;
     }
-    
     .wpb_column.right_padding_phone_-122px > .vc_column-inner {
-        height: calc(100% - 59px);
-    }
-    
-    .container-wrap .vc_row-fluid[data-column-margin="50px"] > .span_12, .container-wrap .vc_row-fluid[data-column-margin="50px"] .full-page-inner > .container > .span_12, .container-wrap .vc_row-fluid[data-column-margin="50px"] .full-page-inner > .span_12{
-        width: calc(100% + 58px);
-    }
-    
-}
-
-@media (min-width: 500px) and (max-width: 999px) {
-    
-    .vc_col-sm-3 {
-        display: flex;
-    }
-    
-    .vc_col-sm-9 {
-       width: 100% !important;
-   }
-   
-    .col4info {
-        padding-top: 10px !important;
-        display: block !important;
-       
-    }
-    
-    .notice-board-blue-background{
-        display: none !important;
-    }
-    
-    .notice-board-header-blue-background {
-        display: none !important;
-    }
-    
-    .notice-board-main-div-blue-background {
-        display: none !important;
-    }
-    
-    .service-list-footer {
-        display: flex !important;
-        flex-direction: column !important; 
-        justify-content: none !important;
-        align-items: none !important; 
-        text-align: center !important;
-    }
-    
-    .book-now-button-schedule{
-        margin-top: -4px;
-        margin-bottom: -6px !important;
-    }
-    
-    .booking-container-class{
-         width: calc(100% + 60px) !important;
-    }
-    
-    #bookingcontainer {
-        display: flex !important;
-        margin-left: -32px !important;
-        margin-right: -32px !important;
-        margin-top: 18px;
-        padding-top: 0px !important;
-    }
-    
-    #currentStatus-Underline {
-        width : calc(100% - 3px) !important;
-        margin-left: 3px !important;
-    }
-    
-    .bookingcontainer{
-        margin-left: -32px !important;
-        margin-right: -32px !important;
-    }
-    
-   li {
-       margin-bottom: -18px !important;
-   }
-   
-   body:not([data-hhun="1"]) #header-outer[data-using-secondary="1"]:not(.hidden-secondary) {
-       transform: none !important;
-       width: 100% !important;
-    }
-
-   .header-outer{
-       width: 100% !important;
-   }
-   
-    .page-template-default {
-        align-items: center;
-    }
-    
-    .container1 {
-        flex-direction: column;
-        align-items: flex-start;
-        width: calc(100% - 60px);
-        gap: 4px !important;
-    }
-    .container2 {
-        flex-direction: column;
-        align-items: flex-start;
-        width: calc(100% - 60px);
-        gap: 60px !important;
-    }
-
-    .container0 {
-        display: flex;
-        align-items: flex-start;
-        width: calc(100% - 60px);
-        margin-left: 6px;
-    }
-
-    .flightsLogo {
-        font-size: 15px !important;
-        font-family: Open Sans;
-        font-weight: 600;
-        text-transform: uppercase;
-        word-wrap: break-word;
-    }
-
-    .right-container0{
-    margin-right: 1px;
-    }
-
-    .MyAccount {
-        font-weight: 700;
-    }
-
-    .currentStatus {
-        margin-left: -8px !important;
-        margin-right: 0px;
-        font-size: 15px !important;
-    }
-
-    .square {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: calc(100% - 60px) !important;
-        margin-bottom: -15px !important;
-        margin-top: -12px !important; 
-        justify-content: flex-end !important;
-        margin-left: 54px;
-    }
-
-    .square img {
-        position: absolute;
-    }
-
-    .container3 {
-        margin-top: 0px !important;
-        padding-top: 0px;
-        padding-left: 26px;
-        width: calc(100% - 60px) !important;
-        display: flex; 
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .container3.searchButtonFlight-activation {
-        margin-top: 0px !important;
-        padding-top: 10px !important;
-    }
-    
-    .right3.right3Status-activation {
-        margin-top: 15px !important;
-    }
-
-    .leftFrom, .left2, .rightTo, .right2, .right3 {
-        padding-top: 3px;
-        display: flex;
-        justify-content: center !important;
-        align-items: center !important;
-        flex: 1 1 auto;
-        margin-right: 55px !important;
-        margin-left: 5px;
-        width: 100%;
-    }
-    
-    .right2{
-        padding-top: 0px;
-        display: flex;
-        justify-content: center !important;
-        align-items: center !important;
-        flex: 1 1 auto;
-        margin-right: 55px !important;
-        margin-left: 5px;
-        width: 100%;
-        margin-top: -24px;
         height: auto !important;
     }
-
-    .right3 {
-        width: calc(100% + 1px);
-        margin-top: 17px
+    
+    .container-wrap .vc_row-fluid[data-column-margin="50px"] > .span_12, 
+    .container-wrap .vc_row-fluid[data-column-margin="50px"] .full-page-inner > .container > .span_12, 
+    .container-wrap .vc_row-fluid[data-column-margin="50px"] .full-page-inner > .span_12 {
+        width: 100% !important;
     }
     
-    .Passenger-Age {
-        margin-left: -56px !important;
-        font-size: 13px !important;
-    }
-    
-    .wpb_column.top_padding_phone_0px > .vc_column-inner {
-        padding-top: 4px !important;
-        margin-left: -4px;
-    }
-    
-    .wpb_column.right_padding_phone_-122px > .vc_column-inner {
-        height: calc(100% - 59px);
-    }
-    
-    .container-wrap .vc_row-fluid[data-column-margin="50px"] > .span_12, .container-wrap .vc_row-fluid[data-column-margin="50px"] .full-page-inner > .container > .span_12, .container-wrap .vc_row-fluid[data-column-margin="50px"] .full-page-inner > .span_12{
-        width: calc(100% + 58px);
-    }
-    
-    .container-wrap .vc_row-fluid[data-column-margin="50px"] .wpb_column:not(.child_column), .container-wrap .inner_row[data-column-margin="50px"] .child_column {
+    .container-wrap .vc_row-fluid[data-column-margin="50px"] .wpb_column:not(.child_column), 
+    .container-wrap .inner_row[data-column-margin="50px"] .child_column {
         padding-right: 0px !important;
         padding-left: 8px !important;
-        margin-top: -18px !important;
+        margin-top: 0px !important;
     }
     
     .full-width-section>.col.span_12 {
-        margin-top: -20px;
+        margin-top: 0px !important;
     }
     
+    /* Stacking passenger list label and age subtext on narrow viewports */
+    @media (max-width: 479px) {
+        #passenger-list li {
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+        }
+        #passenger-list li > div:last-child {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            margin-left: 8px !important;
+            gap: 2px !important;
+        }
+    }
 }
-
 
 @media (min-width: 1000px) and (max-width: 1300px) {
     
@@ -1408,7 +1177,7 @@ Get to work and back with fast, frequent flights. Morning to Night!</span></p><d
 				
 	<div class="wpb_raw_code wpb_raw_html wpb_content_element" >
 		<div class="wpb_wrapper">
-			<div style="width: calc(100% + 49px) !important">
+			<div style="width: 100% !important; max-width: 100%; box-sizing: border-box;">
 
     <div class="container0" style="display: flex; align-items: baseline; margin-top: 11px">
 
