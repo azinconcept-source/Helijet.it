@@ -1,5 +1,5 @@
 /**
- * Helijet.it Page-Transition Loader
+ * Helijet Page-Transition Loader
  * Shows a full-screen spinning loader for 12 seconds before any
  * link or button that would navigate to another page.
  */
